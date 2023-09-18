@@ -1,0 +1,3 @@
+- All: `Create a histogram showing the budget variable.`
+- Alex: ``
+- Carol: ``
