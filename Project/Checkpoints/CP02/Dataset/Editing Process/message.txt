@@ -1,0 +1,188 @@
+Index: 93
+Whyplay: I play it as I watch TV or movies.  I've gone through many a Netflix binge with Isaac.
+Index: 372
+Whyplay: getting good loot
+Index: 1029
+Whyplay: not thinking about my clinic depression.
+Index: 1152
+Whyplay: fulfilling a concept that you created based on the resources that are given to you by the game
+Index: 1202
+Whyplay: mental stimulation
+Index: 2081
+Whyplay: Depends on the day
+Index: 2193
+Whyplay: destroying the enemy
+Index: 2213
+Whyplay: First two options
+Index: 2365
+Whyplay: Performing
+Index: 2479
+Whyplay: The last 3 Choices
+Index: 3439
+Whyplay: competeing
+Index: 4042
+Whyplay: I have no idea
+Index: 4058
+Whyplay: depends what im playing.
+Index: 4242
+Whyplay: to be occupied
+Index: 4394
+Whyplay: Making my brain go numb
+Index: 4524
+Whyplay: occupation
+Index: 4567
+Whyplay: Not feeling the pain my mind can inflict on me
+Index: 4868
+Whyplay: dumpster the enemy beyond words
+Index: 5497
+Whyplay: playing the game
+Index: 6025
+Whyplay: A mix of the 4 above
+Index: 6611
+Whyplay: Any of the former depending on the day.
+Index: 6619
+Whyplay: competition
+Index: 6645
+Whyplay: Crushing kids
+Index: 6970
+Whyplay: A mix of the last three
+Index: 7615
+Whyplay: Sexual thrill
+Index: 7693
+Whyplay: metagame
+Index: 7826
+Whyplay: chasing singed and killing Teemo
+Index: 7890
+Whyplay: hide from my real world problems
+Index: 7945
+Whyplay: I Have no idea why I'm playing.
+Index: 8053
+Whyplay: trying to get my mind off
+Index: 8297
+Whyplay: helping others
+Index: 8335
+Whyplay: A, B, and D
+Index: 8771
+Whyplay: having something to do
+Index: 8913
+Whyplay: Social need
+Index: 9012
+Whyplay: getting away from real life
+Index: 9149
+Whyplay: backdooring in ARAMs
+Index: 9222
+Whyplay: Keeping my mind off my shortcomings.
+Index: 9435
+Whyplay: my ear is happy
+Index: 9572
+Whyplay: Competition
+Index: 9779
+Whyplay: Taking focus off of work
+Index: 9810
+Whyplay: loot
+Index: 9883
+Whyplay: Depends on what I am playing.
+Index: 9981
+Whyplay: being satisfied with my skill
+Index: 10326
+Whyplay: procrastinating
+Index: 10562
+Whyplay: Making it my living
+Index: 10617
+Whyplay: Having a new experience
+Index: 10807
+Whyplay: The 4 of them
+Index: 10811
+Whyplay: I don't know anymore
+Index: 10858
+Whyplay: not arguing, focusing on gameplay
+Index: 10878
+Whyplay: The KDA!
+Index: 10920
+Whyplay: Keeping myself occupied
+Index: 11299
+Whyplay: Prove
+Index: 11583
+Whyplay: doing something
+Index: 11592
+Whyplay: a b c and d
+Index: 11976
+Whyplay: Shitting on the sea anemones
+Index: 12117
+Whyplay: Orgasms
+Index: 12119
+Whyplay: Playing the game
+Index: 12411
+Whyplay: None of the above framed responses.
+Index: 13070
+Whyplay: Making me forget about stuff that's making me nervous
+Index: 13097
+Whyplay: releasing stress/tension
+Index: 13116
+Whyplay: playing good
+
+Se abrirem no excel o index é esse +2
+
+As substituições que fiz foram 
+
+92 -> relaxing
+372 -> improving (numa ideia de o loot melhorar o persongem)
+1029 -> relaxing
+1152-> having fun and improving
+1202-> having fun
+2081-> all (dependendo do dia acabar por ser por vários motivos)
+2193-> winning 
+2213 -> winning and improving
+2365 -> winning
+2479-> improving and relaxing and having fun
+3439-> winning
+4042-> habit
+4058->all
+4242->relaxing
+4394-> relaxing
+4524 -> winning (assumindo que occupation significa que vive do jogo)
+4567 -> relaxing
+4868-> winning
+5497-> having fun
+6025->all
+6611->all
+6619-> winning
+6645-> winning
+6970->improving and relaxing and having fun
+7615-> having fun
+7693->improving
+7826->having fun
+7890->relaxing
+7945->habit
+8053-> relaxing
+8297->playing with others
+8335-> winning and improving and having fun
+8771-> relaxing
+8913-> playing with others
+9012->relaxing
+9149->having fun
+9222->relaxing
+9435->having fun
+9572->winning
+9779->relaxing
+9810->improving
+9883->all
+9981->improving
+10326->relaxing
+10562->winning
+10617->having fun
+10807-> all
+10811->habit
+10858->having fun
+10878->winning
+10920->relaxing
+11299->winning (provar alguma coisa?)
+11583->relaxing
+11592->all
+11976->winning
+12117->having fun
+12119-> having fun
+12411->habit
+13070->relaxing
+13097->relaxing
+13116->winning and improving
