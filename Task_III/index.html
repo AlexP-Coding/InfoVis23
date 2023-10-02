@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cleveland dot plot</title>
+        <style>
+            .dashboard{
+                display: block;
+                padding: 20px;
+            }
+            .visualization{
+                padding: 10px;
+            }
+            #ClevelandTitle{
+                text-align: center;
+            }
+        </style>
+        <!-- Load the D3.js library for data visualization -->
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <!-- Load JavaScript files for the dashboard -->
+        <script src="script.js"></script>
+        <!--script src="linked.js"></script-->
+    </head>
+    <body onload="startDashboard()">
+        <div class="dashboard">
+                <div>
+                    <div id="ClevelandTitle"></div>
+                    <div class="visualization" id="ClevelandDotPlot"></div>
+                </div>
+        </div>
+    </body>
+</html>
