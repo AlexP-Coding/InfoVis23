@@ -1,0 +1,6 @@
+- All: 
+    - `Implement both idioms (Choropleth Map and Scatterplot) from the Geo Tutorial. `
+    - `Implement  a  tooltip  showing  country's  name,  incomeperperson,  alcconsumption,  and  employrate. This tooltip appears next to the mouse pointer when the user hovers a mark. You also  must create a drawer section at the bottom of the page. Whenever you click on a mark, the country's name is added to the drawer. Clicking on it again (either in the drawer or a mark) removes it from the drawer.`
+- Alex: ``
+- Carol: ``
+- Duarte: ``
