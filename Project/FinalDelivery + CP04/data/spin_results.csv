@@ -1,0 +1,6 @@
+MinScore,MaxScore,Meaning
+0,20,None
+21,30,Mild
+31,40,Moderate
+41,50,Severe
+51,68,Very severe
