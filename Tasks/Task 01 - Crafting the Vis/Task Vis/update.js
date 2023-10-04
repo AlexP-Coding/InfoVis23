@@ -219,3 +219,11 @@ function updateLineChart(data) {
     .append("title")
     .text((d) => d.title);
 }
+
+// Function to update the histogram with new data
+function updateHistogram(data) {
+  // Select the SVG element of the histogram
+  const svg = d3.select("#histogram").select("svg").select("g");
+
+  // TODO
+}

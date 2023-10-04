@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="movie.png"/>
     <!-- Styling for the dashboard -->
     <style>
       .dashboard {
@@ -35,10 +36,10 @@
     <!-- Load the D3.js library for data visualization -->
     <script src="https://d3js.org/d3.v7.js"></script>
     <!-- Load JavaScript files for the dashboard -->
-    <script src="script.js"></script>
-    <script src="create.js"></script>
-    <script src="update.js"></script>
-    <script src="linked.js"></script>
+    <script src="script.js?2002"></script>
+    <script src="create.js?2002"></script>
+    <script src="update.js?2002"></script>
+    <script src="linked.js?2002"></script>
   </head>
   <!-- Start the dashboard upon page load -->
   <body onload="startDashboard()">
@@ -56,8 +57,8 @@
       <div class="visualization" id="scatterPlot"></div>
       <!-- Visualization area for the line chart -->
       <div class="visualization" id="lineChart"></div>
-      <!-- Visualization area for the fourth visualization (not specified in the code) -->
-      <div class="visualization" id="vis4"></div>
+      <!-- Visualization area for the histogram -->
+      <div class="visualization" id="histogram"></div>
     </div>
   </body>
 </html>

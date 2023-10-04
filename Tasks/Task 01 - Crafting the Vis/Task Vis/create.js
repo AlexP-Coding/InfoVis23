@@ -1,3 +1,5 @@
+"use strict";
+
 // Function to create a bar chart
 function createBarChart(data) {
   // Select the #barChart element and append an SVG to it
@@ -241,4 +243,102 @@ function createLineChart(data) {
     .style("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .text("Budget");
+}
+
+// Function to create a bar chart
+function createHistogram(data) {
+  const nrBins = 8;
+  const maxBudget = d3.max(data, (d) => d.budget);
+  const budgetRange = [0, maxBudget + maxBudget/nrBins];
+  
+  // Select the #histogram element and append an SVG to it
+  const svg = d3
+    .select("#histogram")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // Create a histogram generator
+  var histogram = d3 
+    .histogram()
+    .value((d) => d.budget)
+    .thresholds(nrBins)
+    .domain(budgetRange)
+
+  // Bin the data
+  var bins = histogram(data)
+
+  // Find the maximum count of movies in a bin to determine Y-axis scale
+  const maxMoviesPerBin = d3.max(bins, (bin) => bin.length);
+  
+  // Create x and y scales for the bars
+  const xScale = d3
+    .scaleLinear()
+    .domain(budgetRange)
+    .range([0, width]);
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, maxMoviesPerBin])
+    .range([height, 0]);
+
+
+  // Append and style the bars using the data and scales
+  svg
+    .selectAll("rect")
+    .data(bins)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("x", (d) => xScale(d.x0))
+    .attr("y", (d) => yScale(d.length))
+    .attr("width", (d) => xScale(d.x1) - xScale(d.x0))
+    .attr("height", (d) => height - yScale(d.length))
+    .attr("fill", "steelblue")
+    .attr("stroke", "black");
+
+  // Append x and y axes to the histogram
+  svg
+    .append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3
+      .axisBottom(xScale)
+      .tickFormat((d) => d3.format(".1f")(d / 1000000) + "M")
+      .tickSizeOuter(0)
+      .ticks(nrBins)
+    );
+
+  svg
+    .append("g")
+    .attr("class", "y-axis")
+    .call(d3.axisLeft(yScale).tickSizeOuter(0));
+
+  // Append x and y axis labels
+  svg
+    .append("text")
+    .attr("class", "x-axis-label")
+    .attr("x", width / 2)
+    .attr("y", height + margin.top + 20)
+    .style("text-anchor", "middle")
+    .text("Budget");
+
+  svg
+    .append("text")
+    .attr("class", "y-axis-label")
+    .attr("x", -height / 2)
+    .attr("y", -margin.left + 30)
+    .style("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Movies");
+
+  // Append a title to the chart
+  svg
+    .append("text")
+    .attr("class", "chart-title")
+    .attr("x", width / 2)
+    .attr("y", -margin.top / 2)
+    .style("text-anchor", "middle")
+    .text("Budget Histogram");
 }
