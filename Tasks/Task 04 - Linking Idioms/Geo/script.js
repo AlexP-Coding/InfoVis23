@@ -43,11 +43,16 @@ function startDashboard() {
     globalDataCapita.forEach(function (d) {
       d.incomeperperson = +d.incomeperperson;
       d.alcconsumption = +d.alcconsumption;
+      d.femaleemployrate = +d.femaleemployrate;
+      d.hivrate = +d.hivrate;
+      d.internetuserate = +d.internetuserate;
+      d.employrate = +d.employrate;
     });
 
     // Call functions to create the choropleth map and scatter plot
     createChoroplethMap();
     createScatterPlot();
+    createClevelandDotPlot();
   });
 }
 
@@ -187,7 +192,7 @@ function createChoroplethMap() {
 function createScatterPlot() {
   // Filter the data to remove entries with missing incomeperperson or alcconsumption values
   currentData = globalDataCapita.filter(function (d) {
-    return d.incomeperperson != "" && d.alcconsumption != "";
+    return d.incomeperperson != "" && d.alcconsumption != "" && d.employrate != "";
   });
 
   // Create an SVG element to hold the scatter plot
@@ -216,6 +221,12 @@ function createScatterPlot() {
     ])
     .range([height, 0]);
 
+    const rScale = d3
+    .scaleLinear()
+    .domain([d3.min(currentData, (d) => d.employrate),
+      d3.max(currentData, (d) => d.employrate),])
+    .range([1, 10]);
+
   // Add circles to the scatter plot representing each country
   svg
     .selectAll(".circle")
@@ -225,7 +236,7 @@ function createScatterPlot() {
     .attr("class", "circle data")
     .attr("cx", (d) => xScale(d.incomeperperson))
     .attr("cy", (d) => yScale(d.alcconsumption))
-    .attr("r", 5)
+    .attr("r", (d) => rScale(d.employrate))
     .attr("fill", "steelblue")
     .attr("stroke", "black")
     .on("mouseover", handleMouseOver) // Function to handle mouseover event
@@ -281,4 +292,151 @@ function createScatterPlot() {
     .style("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .text("Alcohol Consumption");
+}
+
+
+// Function to create the cleveland dot plot
+function createClevelandDotPlot() {
+  width2 = width * 1.5;
+  height2 = height * 3.5;
+  console.log("Reached CDP");
+  // Filter the data to remove entries with missing femaleemployrate, hivrate, internetuserate values
+  currentData2 = globalDataCapita.filter(function (d) {
+    return d.femaleemployrate != "" && d.hivrate != "" && d.internetuserate != "";
+  });
+
+  console.log("Filtered data");
+  console.log(currentData2);
+
+  // Create an SVG element to hold the dot plot
+  const svg = d3
+    .select("#clevelandDotPlot")
+    .append("svg")
+    .attr("width", width2 + margin.left + margin.right)
+    .attr("height", height2 + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+console.log("Appended dot plot")
+  // Create x and y scales for the scatter plot
+  const xScale = d3
+    .scaleLinear()
+    .domain([0, 100])
+    .range([0, width2]);
+    
+    const yScale = d3
+    .scaleBand()
+    .domain(currentData2.map((d) => d.country))
+    .range([0, height2])
+    .padding(1);
+    
+    console.log("Added scales");
+    console.log(xScale)
+    console.log(yScale)
+
+    
+    // Create custom tick values for the x-axis
+  var xTicks = [];
+  for (let index = 0; index <= 1; index += 0.05) {
+    xTicks.push(Math.round(xScale.invert(index * width2)));
+  }
+
+  svg
+  .append("g")
+  .attr("class", "x-axis")
+  .attr("transform", `translate(0,${height2})`)
+  .call(
+    d3
+      .axisBottom(xScale)
+      .tickValues(xTicks) // Set custom tick values for the x-axis
+      .tickSizeOuter(0)
+  );
+  
+  svg
+  .append("g")
+  .attr("class", "y-axis")
+  .call(
+    d3
+      .axisLeft(yScale)
+      .tickSizeOuter(0) // Create grid Y
+  );        
+  
+  console.log("Added ticks");
+
+  // Add lines to the cleveland dot plot connecting each country's values
+  svg.selectAll("clevelandLines")
+    .data(currentData2)
+    .join("line")
+    .attr("x1", function(d) {
+      // Sort the values in ascending order
+      var values = [d.femaleemployrate, d.internetuserate, d.hivrate].sort((a, b) => a - b);
+      return xScale(values[0]);
+    })
+    .attr("y1", function(d) { return yScale(d.country)+yScale.bandwidth() / 2; })
+    .attr("x2", function(d) {
+      var values = [d.femaleemployrate, d.internetuserate, d.hivrate].sort((a, b) => a - b);
+      return xScale(values[2]);
+    })
+    .attr("y2", function(d) { return yScale(d.country)+yScale.bandwidth()/2; })
+    .attr("stroke", "grey")
+    .attr("stroke-width", "0.5px")
+
+    console.log("Added lines");
+
+  // Add circles to the cleveland dot plot representing the hivrate
+  svg
+    .selectAll(".circle")
+    .data(currentData2)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => xScale(d.hivrate))
+    .attr("cy", (d) => yScale(d.country) + yScale.bandwidth() / 2)
+    .attr("r", 3.5)
+    .attr("fill", "green")
+    .attr("stroke", "black");
+
+  // Add circles to the cleveland dot plot representing the internetuserate
+  svg
+    .selectAll(".circle")
+    .data(currentData2)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => xScale(d.internetuserate))
+    .attr("cy", (d) => yScale(d.country) + yScale.bandwidth()/2)
+    .attr("r", 3.5)
+    .attr("fill", "blue")
+    .attr("stroke", "black");
+
+  // Add circles to the cleveland dot plot representing the femaleemployrate
+  svg
+    .selectAll(".circle")
+    .data(currentData2)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => xScale(d.femaleemployrate))
+    .attr("cy", (d) => yScale(d.country) + yScale.bandwidth()/2)
+    .attr("r", 3.5)
+    .attr("fill", "red")
+    .attr("stroke", "black");
+  
+  console.log("Added circles");
+
+  // Add labels for the x and y axes
+  svg
+    .append("text")
+    .attr("class", "x-axis-label")
+    .attr("x", width2 / 2)
+    .attr("y", height2 + margin.top + 20)
+    .style("text-anchor", "middle")
+    .text("Rates");
+
+  svg
+    .append("text")
+    .attr("class", "y-axis-label")
+    .attr("x", -height2 / 2)
+    .attr("y", -margin.left + 15)
+    .style("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .text("Country");
+
+    console.log("Added labels");
 }
