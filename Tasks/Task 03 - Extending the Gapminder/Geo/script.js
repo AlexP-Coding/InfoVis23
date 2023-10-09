@@ -46,6 +46,7 @@ function startDashboard() {
       d.femaleemployrate = +d.femaleemployrate;
       d.hivrate = +d.hivrate;
       d.internetuserate = +d.internetuserate;
+      d.employrate = +d.employrate;
     });
 
     // Call functions to create the choropleth map and scatter plot
@@ -191,7 +192,7 @@ function createChoroplethMap() {
 function createScatterPlot() {
   // Filter the data to remove entries with missing incomeperperson or alcconsumption values
   currentData = globalDataCapita.filter(function (d) {
-    return d.incomeperperson != "" && d.alcconsumption != "";
+    return d.incomeperperson != "" && d.alcconsumption != "" && d.employrate != "";
   });
 
   // Create an SVG element to hold the scatter plot
@@ -220,6 +221,12 @@ function createScatterPlot() {
     ])
     .range([height, 0]);
 
+    const rScale = d3
+    .scaleLinear()
+    .domain([d3.min(currentData, (d) => d.employrate),
+      d3.max(currentData, (d) => d.employrate),])
+    .range([1, 10]);
+
   // Add circles to the scatter plot representing each country
   svg
     .selectAll(".circle")
@@ -229,7 +236,7 @@ function createScatterPlot() {
     .attr("class", "circle data")
     .attr("cx", (d) => xScale(d.incomeperperson))
     .attr("cy", (d) => yScale(d.alcconsumption))
-    .attr("r", 5)
+    .attr("r", (d) => rScale(d.employrate))
     .attr("fill", "steelblue")
     .attr("stroke", "black")
     .on("mouseover", handleMouseOver) // Function to handle mouseover event
