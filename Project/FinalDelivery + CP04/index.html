@@ -36,9 +36,11 @@
 	<!-- Load the D3.js library for data visualization -->
 	<script src="https://d3js.org/d3.v7.js"></script>
 	<!-- Load JavaScript files for the dashboard -->
-	<script src="scripts/script.js"></script>
-	<script src="scripts/create.js"></script>
-	<script src="scripts/update.js"></script>
+	<script src="scripts/visManager.js"></script>
+	<script src="scripts/idioms/choropleth.js"></script>
+	<script src="scripts/idioms/customIdiom.js"></script>
+	<script src="scripts/idioms/sankey.js"></script>
+	<script src="scripts/idioms/scatterplot.js"></script>
 	<script src="scripts/linked.js"></script>
   </head>
   <!-- Start the dashboard upon page load -->
@@ -52,13 +54,13 @@
 	<!-- The main grid layout of the dashboard -->
 	<div class="dashboard">
 	  <!-- Visualization area for the choroplet chart -->
-	  <div class="visualization" id="choropletChart"></div>
+	  <div class="visualization" id="choroplethChart"></div>
 	  <!-- Visualization area for the sankey chart -->
 	  <div class="visualization" id="sankeyChart"></div>
 	  <!-- Visualization area for the custom idiom -->
 	  <div class="visualization" id="customIdiom"></div>
 	  <!-- Visualization area for the scatter plot -->
-	  <div class="visualization" id="scatterPlot"></div>
+	  <div class="visualization" id="scatterplot"></div>
 	</div>
   </body>
 </html>
