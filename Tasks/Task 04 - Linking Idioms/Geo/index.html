@@ -19,6 +19,14 @@
             #choroplethTitle {
                 text-align: center;
             }
+            .drawer{
+                position: fixed;
+                bottom: 0;
+                left: 0%;
+                width: 100%;
+                background-color: #ffffff;
+                padding: 10px;
+            }
         </style>
         <script src="https://d3js.org/d3.v7.min.js"></script>
         <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
@@ -36,5 +44,6 @@
             </div>
             <div class="visualization" id="scatterPlot"></div>
         </div>
+        <div class="drawer" id="drawer"></div>
     </body>
 </html>

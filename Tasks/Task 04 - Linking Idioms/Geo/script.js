@@ -1,6 +1,8 @@
 // Declare global variables to hold data for countries and capita
 var globalDataCountries;
 var globalDataCapita;
+var Tooltip
+var svgWidth = 1300;
 
 // Define margin and dimensions for the charts
 const margin = {
@@ -11,6 +13,7 @@ const margin = {
 };
 const width = 500 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
+
 
 // Function to start the dashboard
 function startDashboard() {
@@ -48,8 +51,15 @@ function startDashboard() {
     // Call functions to create the choropleth map and scatter plot
     createChoroplethMap();
     createScatterPlot();
+    createDrawer();
+    Tooltip = createTooltip();
+    
+    
   });
 }
+
+console.log("svgWidth:", svgWidth)
+
 
 // Function to create the choropleth map
 function createChoroplethMap() {
@@ -103,7 +113,8 @@ function createChoroplethMap() {
     .attr("d", path)
     .attr("stroke", "black")
     .on("mouseover", handleMouseOver) // Function to handle mouseover event
-    .on("mouseout", handleMouseOut)   // Function to handle mouseout event
+    .on("mouseout", handleMouseOut)   // Function to handle mouseout 
+    .on("click" , handleClick)
     .append("title")
     .text((d) => d.properties.name);
 
@@ -230,6 +241,7 @@ function createScatterPlot() {
     .attr("stroke", "black")
     .on("mouseover", handleMouseOver) // Function to handle mouseover event
     .on("mouseout", handleMouseOut)   // Function to handle mouseout event
+    .on("click" , handleClick)
     .append("title")
     .text((d) => d.country);
 
@@ -281,4 +293,42 @@ function createScatterPlot() {
     .style("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .text("Alcohol Consumption");
+
+}
+
+function createTooltip(){
+
+  var Tooltip = d3
+    .select("body")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "d3-tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .style("position", "absolute") // Set the position to "absolute"
+    .style("left", "0px") // Set the initial left position (modify as needed)
+    .style("top", "0px"); // Set the initial top position (modify as needed)
+    // Return the tooltip reference
+  return Tooltip;
+}
+
+function createDrawer(){
+
+
+  const width_drawer = d3.select("#drawer").node().getBoundingClientRect().width - margin.left - margin.right;
+  const height_drawer = 100 - margin.top - margin.bottom;
+  
+  //Create SVG to hold the drawer
+  const svg = d3.select("#drawer")
+  .append("svg")
+  .attr("width", width_drawer + margin.left + margin.right)
+  .attr("height", height_drawer + margin.top + margin.bottom)
+  .attr("id", "mySVG")
+  .append("g")
+  //.attr("transform", `translate(${margin.left},${margin.top})`);
+  //svgWidth = d3.select("#drawer").node().getBoundingClientRect().width;
+  //onsole.log(svgWidth)
 }
