@@ -31,10 +31,7 @@ function createCustomIdiom(data) {
 				.startAngle(d => yScale(d))
 				.endAngle(d => xScale(d.Residence) + xScale.bandwidth())
 				.padRadius(innerRadius)
-				);
-
-
-	
+				);	
 }
 
 

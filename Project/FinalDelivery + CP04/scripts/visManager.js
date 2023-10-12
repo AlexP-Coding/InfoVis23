@@ -67,6 +67,9 @@ function startDashboard() {
 		});*/
 	
 		createChoroplethMap();
+// TODO		createCustomIdiom();
+// TODO		createSankey();
+// TODO		createScatterplot();
 	
 	})
 	.catch((error) => {
@@ -78,14 +81,8 @@ function startDashboard() {
 
 // This function updates the visualizations based on the selected data type(s).
 function updateIdioms(data) {
-	// Use a switch statement to check which data type is selected.
-	switch (data) {
-		default:
-			// If no specific data type is selected, update the visualizations with all the data.
-			updateChoropleth(globalData);
-			updateSankey(globalData);
-			updateCustomIdiom(globalData);
-			updateScatterplot(globalData);
-		break;
-	}
+	updateChoropleth(data);
+// TODO	updateCustomIdiom(data);
+// TODO	updateSankey(data);
+// TODO	updateScatterplot(data);
 }

@@ -253,3 +253,45 @@ function createChoroplethMap() {
   
 	
 }
+
+
+function updateChoropleth(data) {
+	updateChoropleth()
+}
+
+
+// MapUpdate(), just renamed and moved from linked.js
+function updateChoropleth(){
+
+	console.log(range_min)
+	console.log(range_max)
+	currentData_CM_update = globalData.filter(function (d) {
+	  return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
+	});
+  
+	const groupedData = d3.group(currentData_CM_update, (d) => d.Residence);
+  
+  
+  
+	countryMedian = new Map([...groupedData].map(([key, values]) => {
+	  const avgSPIN_T = d3.median(values, (d) => d.SPIN_T);
+	  return [key, avgSPIN_T];
+	}));
+  
+	const countriesInMap = Array.from(countryMedian.keys());
+	
+	d3.selectAll("path")
+	  .attr("fill", function (d) {
+		// Check if the country's name is in the map, if not, paint it black
+		if (countriesInMap.includes(d.properties.name)) {
+		  return d3.interpolatePurples(colorScale(countryMedian.get(d.properties.name)));
+		} else {
+		  return "black"; // or any other color you prefer
+		}
+	  });
+  
+	SPIN_T_global = d3.median(countryMedian.values())
+  
+	d3.select("#SPINcircle").attr("cx",(d) => xScale(SPIN_T_global))
+  
+  }
