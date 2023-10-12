@@ -15,46 +15,30 @@
 	  .visualization {
 		padding: 10px;
 	  }
-	  .dashboard > :nth-child(1),
-	  .dashboard > :nth-child(2),
-	  .dashboard > :nth-child(3),
-	  .dashboard > :nth-child(4) {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	  }
-	  .button-container {
-		text-align: center;
-		margin-bottom: 5px;
-	  }
-	  .button-container button {
-		margin: 5px;
-		padding: 10px 20px;
-		font-size: 16px;
-	  }
 	</style>
 	<!-- Load the D3.js library for data visualization -->
 	<script src="https://d3js.org/d3.v7.js"></script>
+  <!-- Needed to load JSON file -->
+  <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 	<!-- Load JavaScript files for the dashboard -->
 	<script src="scripts/visManager.js"></script>
 	<script src="scripts/idioms/choropleth.js"></script>
-	<script src="scripts/idioms/customIdiom.js"></script>
+  <script src="scripts/idioms/customIdiom.js"></script>
 	<script src="scripts/idioms/sankey.js"></script>
 	<script src="scripts/idioms/scatterplot.js"></script>
 	<script src="scripts/linked.js"></script>
   </head>
   <!-- Start the dashboard upon page load -->
   <body onload="startDashboard()">
-	<!-- Buttons to update the data visualization -->
-	<div class="button-container">
-	  <button onclick="updateIdioms('old')">Old Data</button>
-	  <button onclick="updateIdioms('new')">New Data</button>
-	  <button onclick="updateIdioms('all')">All Data</button>
-	</div>
 	<!-- The main grid layout of the dashboard -->
 	<div class="dashboard">
 	  <!-- Visualization area for the choroplet chart -->
-	  <div class="visualization" id="choroplethChart"></div>
+	  <div>
+      <div id="choroplethTitle"></div>
+      <div class="visualization" id="choroplethRange"></div>
+      <div class="visualization" id="choroplethLabel"></div>
+      <div class="visualization" id="choropleth"></div>
+    </div>
 	  <!-- Visualization area for the sankey chart -->
 	  <div class="visualization" id="sankeyChart"></div>
 	  <!-- Visualization area for the custom idiom -->

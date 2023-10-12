@@ -4,6 +4,18 @@ var currentData;
 var spinAnswersData;
 var spinQuestionsData;
 var spinResultsData;
+var globalDataCountries;
+
+//Variables used in Choropleth
+
+var currentData_CM;
+var countryMedian;
+var SPIN_T_global;
+var range_min;
+var range_max;
+var xScale;
+var legendWidth;
+var colorScale;
 
 // Define margins for the visualizations. 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -16,49 +28,50 @@ const height = 400 - margin.top - margin.bottom;
 // This function initiates the dashboard and loads the csv data.
 function startDashboard() {
 
-	// Load the SECONDARY csv data using D3.js.
+	// Helper functions to load JSON and CSV files using D3's d3.json and d3.csv
+	function loadJSON(file) {
+		return d3.json(file);
+	  }
+	  function loadCSV(file) {
+		return d3.csv(file);
+	}
 
-	d3.csv("data/spin_answers.csv")
-		.then((spin_answers_data) => {
-			// Once the data is loaded successfully, store it in the corresponding variable.
-			spinAnswersData = spin_answers_data;
-	})
-	.catch((error) => {
-		console.error("Error loading a secondary csv file:", error);
-	});
+	// Function to import all files using Promise.all
+	function importFiles(json1, csv1, csv2, csv3, csv4){
+		return Promise.all([loadJSON(json1), loadCSV(csv1), loadCSV(csv2), loadCSV(csv3), loadCSV(csv4)]);
+	}
 
-	d3.csv("data/spin_questions.csv")
-		.then((spin_questions_data) => {
-			spinQuestionsData = spin_questions_data;
-	})
-	.catch((error) => {
-	console.error("Error loading a secondary csv file:", error);
-	});
+	//File names
+	const json1 = "data/data.json"
+	const csv1 = "data/clean_data.csv"
+	const csv2 = "data/spin_answers.csv"
+	const csv3 = "data/spin_questions.csv"
+	const csv4 = "data/spin_results.csv"
 
-	d3.csv("data/spin_results.csv")
-		.then((spin_results_data) => {
-			spinResultsData = spin_results_data;
-	})
-	.catch((error) => {
-		console.error("Error loading a secondary csv file:", error);
-	});
+	importFiles(json1, csv1, csv2, csv3, csv4).then(function (results) {
+		// Store the JSON data into globalDataCountries using topojson.feature
+		globalDataCountries = topojson.feature(results[0], results[0].objects.countries);
+		
+		// Store the main data into globalDataCapita
+		globalData = results[1];
 
+		//Load secondary data
+		spinAnswersData = results[2];
+		spinQuestionsData = results[3];
+		spinResultsData = results[4];
 
-	// Load the PRIMARY csv data using D3.js.
-
-	d3.csv("data/clean_data.csv")
-	.then((data) => {
-		globalData = data;
-
-		// Create different visualizations using the loaded data.
-		createChoropleth(data);
-		createSankey(data)
-		//createCustomIdiom(data);
-		createScatterplot(data);
+	
+		/*// Convert incomeperperson and alcconsumption data to numbers
+		globalDataCapita.forEach(function (d) {
+		  d.SPIN_T = +d.SPIN_T;
+		});*/
+	
+		createChoroplethMap();
+	
 	})
 	.catch((error) => {
 		// If there's an error while loading the csv data, log the error.
-		console.error("Error loading the main csv file:", error);
+		console.error("Error loading the files:", error);
 	});
 }
 
