@@ -1,9 +1,10 @@
 // Declare variables to hold the loaded csv data.
 var globalData;
+var currentData;
+var spinAnswersData;
+var spinQuestionsData;
+var spinResultsData;
 var globalDataCountries;
-var spinAnswersData = 0;
-var spinQuestionsData = 0;
-var spinResultsData = 0;
 
 //Variables used in Choropleth
 
