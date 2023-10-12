@@ -1,8 +1,9 @@
 // Declare variables to hold the loaded csv data.
 var globalData;
-const spinAnswersData = 0;
-const spinQuestionsData = 0;
-const spinResultsData = 0;
+var currentData;
+var spinAnswersData;
+var spinQuestionsData;
+var spinResultsData;
 
 // Define margins for the visualizations. 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -52,7 +53,7 @@ function startDashboard() {
 		// Create different visualizations using the loaded data.
 		createChoropleth(data);
 		createSankey(data)
-		createCustomIdiom(data);
+		//createCustomIdiom(data);
 		createScatterplot(data);
 	})
 	.catch((error) => {
