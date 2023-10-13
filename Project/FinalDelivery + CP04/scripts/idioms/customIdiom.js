@@ -1,37 +1,62 @@
 // Function to create the custom idiom
-function createCustomIdiom(data) {
+function createCustomIdiom() {
 	// Select the #customIdiom element and append an SVG to it
+
 	const svg = d3
 		.select("#customIdiom")
 		.append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
-		.attr("transform", `translate(${margin.left},${margin.top})`);
+		.attr("transform", `translate(${width/2},${height/2+100})`);
+
+
+	currentDataRadial = globalData.filter(function (d) {
+		return d.Residence != "Undefined" && d.SPIN_M != "Undefined" && d.SPIN_T != -1;
+	});
+
+	const dataBySpinRes = Array.from(
+		d3.group(currentDataRadial, (d) => d.SPIN_M).entries())
+		.map(([SPIN_M, data]) => ({ SPIN_M, data}));
+
+	dataCountBySpinRes = {};
+	sumPeople = 0;
+	dataBySpinRes.forEach(resId => {
+		nrPeople = dataBySpinRes[resId].length;
+		dataCountBySpinRes[resId] = nrPeople;
+		sumPeople += nrPeople;
+	});
 
 	innerRadius = 80;
 	outerRadius = Math.min(width, height)/2
 
 	const xScale = d3.scaleBand()
-		.range(0, 2*Math.PI)
+		.range([0, 2*Math.PI])
 		.align(0)
-		.domain(spinResultsData.map(d => d.Meaning));
-
-	const gamersByCountryBySPIN = d3.group(globalData, (d) => d.Residence, (d) => d.SPIN_M);
+		.domain(dataBySpinRes.map(d => d.SPIN_M));
 
 	const yScale = d3.scaleRadial()
 		.range([innerRadius, outerRadius])
-		.domain([0, d3.max(gamersByCountryBySPIN, d => d3.count(d.Residence && d.SPIN_M))]);
+		.domain([0, 100]);
+
+	const dataCountBySpinResArray =
+	Array.from(dataCountBySpinRes.entries())
+		.map(([SPIN_M, count]) => ({ SPIN_M, count}));
 
 	svg.append("g")
 		.selectAll("path")
+		.data(dataBySpinRes)
 		.join("path")
-			.attr("d", d3.arc ()
-				.innerRadius(innerRadius)
-				.startAngle(d => yScale(d))
-				.endAngle(d => xScale(d.Residence) + xScale.bandwidth())
-				.padRadius(innerRadius)
-				);	
+			.attr("fill", "#69b3a2")
+			.attr("d", d3.arc()     // imagine your doing a part of a donut plot
+					.innerRadius(innerRadius)
+					.outerRadius(d => yScale(d.count/sumPeople*100))
+					.startAngle(d => xScale(d.SPIN_M))
+					.endAngle(d => xScale(d.SPIN_M) + xScale.bandwidth())
+					.padAngle(0.01)
+					.padRadius(innerRadius))
+
+	console.log("Yay i reached the end of create custom idiom!")
 }
 
 
