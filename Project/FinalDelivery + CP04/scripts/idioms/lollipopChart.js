@@ -7,15 +7,15 @@ function createLollipopChart() {
     // Function to create the lollipop chart
     const groupedData = d3.group(currentData_CM, (d) => d.Residence);
 
-    countryMedian = new Map([...groupedData].map(([key, values]) => {
+    /*countryMedian = new Map([...groupedData].map(([key, values]) => {
         const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
         return [key, medianSPIN_T];
-    }));
+    }));*/
     
     // mexer aqui para alterar o tamanho do chart!!!!!
     const margin_lp = { top: 10, right: 30, bottom: 90, left: 60 }; // Adjusted left margin_lp for labels
-    width_lp = 2000 - margin_lp.left - margin_lp.right; // Increased width
-    height_lp = 500 - margin_lp.top - margin_lp.bottom;
+    width_lp = 1500 - margin_lp.left - margin_lp.right; // Increased width
+    height_lp = 250 - margin_lp.top - margin_lp.bottom;
 
 // Append the SVG object to the body of the page
     const svg = d3.select("#lollipopChart")
@@ -79,7 +79,7 @@ function createLollipopChart() {
         .attr("x", width_lp / 2)
         .attr("y", margin_lp.top)
         .attr("text-anchor", "middle")
-        .text("Average SPIN_T by Residence");
+        .text("Median SPIN_T by Residence");
 
 // Label for Y-axis
     svg.append("text")
@@ -87,7 +87,7 @@ function createLollipopChart() {
         .attr("y", -margin_lp.left + 10)
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
-        .text("Average SPIN_T (Median)");
+        .text("Median SPIN_T");
 }
 
 
@@ -96,10 +96,10 @@ function updateLollipopChart(sortingOption) {
 
     const groupedData = d3.group(currentData_CM, (d) => d.Residence);
 
-    countryMedian = new Map([...groupedData].map(([key, values]) => {
+    /*countryMedian = new Map([...groupedData].map(([key, values]) => {
         const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
         return [key, medianSPIN_T];
-    }));
+    }));*/
 
     const data = Array.from(countryMedian.entries()).map(([Residence, SPIN_T]) => ({ Residence, SPIN_T }));
 
