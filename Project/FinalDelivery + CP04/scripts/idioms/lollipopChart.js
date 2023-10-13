@@ -72,7 +72,8 @@ function createLollipopChart() {
         .attr("cy", d => yValues(d.SPIN_T))
         .attr("r", 5)
         .attr("class", "Lollipopcircle data")
-        .attr("fill", "purple");
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
+
 
 // Chart title
     svg.append("text")
@@ -156,8 +157,10 @@ function updateLollipopChart(sortingOption) {
             return xNames(d.Residence) + xNames.bandwidth() / 2;
         })
         .attr("cy", d => yValues(d.SPIN_T))
-    
-    
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
+
+
+
 }
 
 
