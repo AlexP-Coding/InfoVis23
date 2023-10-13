@@ -9,6 +9,7 @@ var globalDataCountries;
 //Variables used in Choropleth
 
 var currentData_CM;
+var currentData_CM_update;
 var countryMedian;
 var SPIN_T_global;
 var range_min;
@@ -74,13 +75,15 @@ function startDashboard() {
 		// If there's an error while loading the csv data, log the error.
 		console.error("Error loading the files:", error);
 	});
+
+	
 }
 
 
 // This function updates the visualizations based on the selected data type(s).
-function updateIdioms(data) {
-	updateChoropleth(data);
-	updateLollipopChart(data);
+function updateIdioms() {
+	updateChoropleth();
+	//YupdateLollipopChart(data);
 // TODO	updateCustomIdiom(data);
 // TODO	updateSankey(data);
 // TODO	updateScatterplot(data);

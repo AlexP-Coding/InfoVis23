@@ -27,7 +27,7 @@ function handleDragMin(event){
 	}
   
   // TODO: switch to current data rather than global once CD is the one being updated
-	updateIdioms(globalData)
+	updateIdioms()
   
 }
 
@@ -45,7 +45,7 @@ function handleDragMax(event){
 	}
   
   // TODO: switch to current data rather than global once CD is the one being updated
-	updateIdioms(globalData);
+	updateIdioms();
 }
 
 // Add new circles for clicked countries
@@ -106,7 +106,6 @@ function handleMouseOverCM(event,item){
   //console.log(d3.selectAll(".data"))
   d3.selectAll(".data")
     .filter(function (d) {
-      console.log(d3.selectAll(".data"))
       if ("properties" in item) {
         if ("properties" in d) {
           return item.properties.name == d.properties.name;

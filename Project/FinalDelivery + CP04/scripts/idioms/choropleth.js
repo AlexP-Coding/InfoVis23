@@ -1,7 +1,6 @@
 // Function to create the choropleth map
 function createChoroplethMap() {
 	// Filter the data to remove entries with missing incomeperperson values
-	console.log(globalData)
 	currentData_CM = globalData.filter(function (d) {
 	  return d.Residence != "Undefined";
 	});
@@ -255,7 +254,7 @@ function createChoroplethMap() {
 }
 
 
-function updateChoropleth(data) {
+function updateChoropleth() {
 	updateChoropleth()
 }
 
@@ -263,15 +262,14 @@ function updateChoropleth(data) {
 // MapUpdate(), just renamed and moved from linked.js
 function updateChoropleth(){
 
-	console.log(range_min)
-	console.log(range_max)
+	
 	currentData_CM_update = globalData.filter(function (d) {
 	  return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
 	});
   
 	const groupedData = d3.group(currentData_CM_update, (d) => d.Residence);
   
-  
+	console.log(clickedCountries)
   
 	countryMedian = new Map([...groupedData].map(([key, values]) => {
 	  const avgSPIN_T = d3.median(values, (d) => d.SPIN_T);
@@ -293,5 +291,13 @@ function updateChoropleth(){
 	SPIN_T_global = d3.median(countryMedian.values())
   
 	d3.select("#SPINcircle").attr("cx",(d) => xScale(SPIN_T_global))
+
+	console.log(clickedCountries)
+
+	for (const circles of clickedCountries){
+		console.log("aaaaa")
+		circles.element.attr("cx",(d) => xScale(countryMedian.get(circles.country)))
+		
+	}
   
   }
