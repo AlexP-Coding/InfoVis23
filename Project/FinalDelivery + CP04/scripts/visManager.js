@@ -58,6 +58,7 @@ function startDashboard() {
 		
 		// Store the main data into globalDataCapita
 		globalData = results[1];
+		currentData = results[1]
 
 		//Load secondary data
 		spinAnswersData = results[2];
@@ -66,7 +67,7 @@ function startDashboard() {
 	
 		createChoroplethMap();
 		createLollipopChart();
-		createCustomIdiom();
+	//	createCustomIdiom();
 // TODO		createSankey();
 // TODO		createScatterplot();
 	
