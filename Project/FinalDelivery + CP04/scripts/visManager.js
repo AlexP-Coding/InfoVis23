@@ -67,7 +67,8 @@ function startDashboard() {
 		});*/
 	
 		createChoroplethMap();
-// TODO		createCustomIdiom();
+		createLollipopChart();
+		createCustomIdiom();
 // TODO		createSankey();
 // TODO		createScatterplot();
 	
@@ -82,6 +83,7 @@ function startDashboard() {
 // This function updates the visualizations based on the selected data type(s).
 function updateIdioms(data) {
 	updateChoropleth(data);
+	updateLollipopChart(data);
 // TODO	updateCustomIdiom(data);
 // TODO	updateSankey(data);
 // TODO	updateScatterplot(data);
