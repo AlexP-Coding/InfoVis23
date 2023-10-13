@@ -269,16 +269,15 @@ function updateChoropleth(){
   
 	const groupedData = d3.group(currentData_CM_update, (d) => d.Residence);
   
-	console.log(clickedCountries)
   
 	countryMedian = new Map([...groupedData].map(([key, values]) => {
-	  const avgSPIN_T = d3.median(values, (d) => d.SPIN_T);
-	  return [key, avgSPIN_T];
+	  const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
+	  return [key, medianSPIN_T];
 	}));
   
 	const countriesInMap = Array.from(countryMedian.keys());
 	
-	d3.selectAll("path")
+	d3.selectAll(".country")
 	  .attr("fill", function (d) {
 		// Check if the country's name is in the map, if not, paint it black
 		if (countriesInMap.includes(d.properties.name)) {
@@ -292,10 +291,7 @@ function updateChoropleth(){
   
 	d3.select("#SPINcircle").attr("cx",(d) => xScale(SPIN_T_global))
 
-	console.log(clickedCountries)
-
 	for (const circles of clickedCountries){
-		console.log("aaaaa")
 		circles.element.attr("cx",(d) => xScale(countryMedian.get(circles.country)))
 		
 	}

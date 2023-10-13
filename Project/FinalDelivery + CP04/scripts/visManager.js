@@ -81,9 +81,9 @@ function startDashboard() {
 
 
 // This function updates the visualizations based on the selected data type(s).
-function updateIdioms(data=null) {
+function updateIdioms() {
 	updateChoropleth();
-	updateLollipopChart(data);	
+	updateLollipopChart();	
 // TODO	updateCustomIdiom(data);
 // TODO	updateSankey(data);
 // TODO	updateScatterplot(data);
