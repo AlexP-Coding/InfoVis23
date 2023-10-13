@@ -13,9 +13,9 @@ function createLollipopChart() {
     }));*/
     
     // mexer aqui para alterar o tamanho do chart!!!!!
-    const margin_lp = { top: 10, right: 30, bottom: 90, left: 60 }; // Adjusted left margin_lp for labels
+    const margin_lp = { top: 10, right: 10, bottom: 90, left: 40 }; // Adjusted left margin_lp for labels
     width_lp = 1500 - margin_lp.left - margin_lp.right; // Increased width
-    height_lp = 250 - margin_lp.top - margin_lp.bottom;
+    height_lp = 240 - margin_lp.top - margin_lp.bottom;
 
 // Append the SVG object to the body of the page
     const svg = d3.select("#lollipopChart")
@@ -131,7 +131,7 @@ function updateLollipopChart(sortingOption) {
 
     d3.select("#xAxis")
         .transition()
-        .duration(500) // You can adjust the duration as needed
+        .duration(1000) // You can adjust the duration as needed
         .call(d3.axisBottom(xNames))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
@@ -140,6 +140,8 @@ function updateLollipopChart(sortingOption) {
 
     d3.selectAll(".LollipopLine")
         .data(sortedData)
+        .transition()
+        .duration(1000)
         .attr("x1", d => xNames(d.Residence) + xNames.bandwidth() / 2)
         .attr("x2", d => xNames(d.Residence) + xNames.bandwidth() / 2)
         .attr("y1", d => yValues(d.SPIN_T))
@@ -148,6 +150,8 @@ function updateLollipopChart(sortingOption) {
 
     d3.selectAll(".Lollipopcircle")
         .data(sortedData)
+        .transition()
+        .duration(1000)
         .attr("cx", function (d){
             return xNames(d.Residence) + xNames.bandwidth() / 2;
         })
