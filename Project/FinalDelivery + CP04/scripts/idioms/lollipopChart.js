@@ -1,5 +1,17 @@
-// Function to create the lollipop chart
+let data;
 function createLollipopChart() {
+    // Function to create the lollipop chart
+    console.log(globalData)
+    currentData_CM = globalData.filter(function (d) {
+        return d.Residence != "Undefined";
+    });
+
+    const groupedData = d3.group(currentData_CM, (d) => d.Residence);
+
+    countryMedian = new Map([...groupedData].map(([key, values]) => {
+        const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
+        return [key, medianSPIN_T];
+    }));
     
     // mexer aqui para alterar o tamanho do chart!!!!!
     const margin = { top: 10, right: 30, bottom: 90, left: 60 }; // Adjusted left margin for labels
@@ -14,7 +26,7 @@ function createLollipopChart() {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// Assuming you have your data in the "countryMedian" variable
+
     const data = Array.from(countryMedian.entries()).map(([Residence, SPIN_T]) => ({ Residence, SPIN_T }));
 
 // X axis
@@ -72,9 +84,65 @@ function createLollipopChart() {
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
         .text("Average SPIN_T (Median)");
-
-
-
 }
+
+function sortLollipopByCountryName() {
+    data.sort((a, b) => d3.ascending(a.Residence, b.Residence));
+    updateLollipopChart();
+}
+
+function sortLollipopBySpinT() {
+    data.sort((a, b) => d3.descending(a.SPIN_T, b.SPIN_T));
+    updateLollipopChart();
+}
+
+function sortLollipopByAvgHoursPlayed() {
+    // calculate average hour per country 
+    //data.sort((a, b) => d3.descending(a.AvgHoursPlayed, b.AvgHoursPlayed));
+    //updateLollipopChart();
+}
+function updateLollipopChart() {
+    const svg = d3.select("#lollipopChart").select("svg").select("g");
+
+    // Update the x domain based on the sorted data
+    x.domain(data.map(d => d.Residence));
+
+    // Update the X-axis
+    svg.select(".x-axis")
+        .transition()
+        .duration(1000)
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+    // Update the lines
+    svg.selectAll("line")
+        .data(data)
+        .transition()
+        .duration(1000)
+        .attr("x1", d => x(d.Residence) + x.bandwidth() / 2)
+        .attr("x2", d => x(d.Residence) + x.bandwidth() / 2);
+
+    // Update the circles
+    svg.selectAll("circle")
+        .data(data)
+        .transition()
+        .duration(1000)
+        .attr("cx", d => x(d.Residence) + x.bandwidth() / 2);
+
+    // Redraw the chart title
+    svg.select(".chart-title")
+        .text("Average SPIN_T by Residence");
+}
+
+
+
+
+
+
+
+
+
 
 
