@@ -19,6 +19,7 @@
 	<!-- Load the D3.js library for data visualization -->
 	<script src="https://d3js.org/d3.v7.js"></script>
   <!-- Needed to load JSON file -->
+	  
   <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 	<!-- Load JavaScript files for the dashboard -->
 	<script src="scripts/visManager.js"></script>
@@ -33,6 +34,7 @@
   <body onload="startDashboard()">
 	<!-- The main grid layout of the dashboard -->
 	<div class="dashboard">
+		
 	  <!-- Visualization area for the choroplet chart -->
 	  <div>
       <div id="choroplethTitle"></div>
@@ -47,7 +49,13 @@
 	  <!-- Visualization area for the scatter plot -->
 	  <div class="visualization" id="scatterplot"></div>
 	  <!-- Visualization area for the lollipop chart -->
-			  <div class="visualization" id="lollipopChart"></div>
+	  <div class="visualization" id="lollipopChart"></div>
+		<div>
+			<button onclick="sortLollipopByCountryName()">Sort by Country Name</button>
+			<button onclick="sortLollipopBySpinT()">Sort by Highest Spin T</button>
+			<button onclick="sortLollipopByAvgHoursPlayed()">Sort by Avg Hours Played</button>
+		</div>
+		
 	</div>
   </body>
 </html>
