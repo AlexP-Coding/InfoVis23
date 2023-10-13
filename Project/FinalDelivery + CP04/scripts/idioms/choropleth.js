@@ -14,12 +14,12 @@ function createChoroplethMap() {
 	}));
   
 	// Create a title for the choropleth map
-	const chartTitle = d3
+	/*const chartTitle = d3
 	  .select("#choroplethTitle")
 	  .append("text")
-	  .attr("x", width / 2)
-	  .attr("y", margin.top)
-	  .text("Average SPI_T");
+	  .attr("x", width/2+500)
+	  .attr("y", margin.top-1)
+	  .text("MEDIAN SPIN_T");*/
   
 	// Create an SVG element to hold the map
 	const svg = d3
@@ -59,9 +59,9 @@ function createChoroplethMap() {
 	  .attr("class", "country data")
 	  .attr("d", path)
 	  .attr("stroke", "black")
-	  //.on("mouseover", handleMouseOver) // Function to handle mouseover event
-	  //.on("mouseout", handleMouseOut)   // Function to handle mouseout 
-	  //.on("click" , handleClick)
+	  .on("mouseover", handleMouseOverCM) // Function to handle mouseover event
+	  .on("mouseout", handleMouseOutCM)   // Function to handle mouseout 
+	  .on("click" , handleClickCM)
 	  .append("title")
 	  .text((d) => d.properties.name);
   
@@ -98,7 +98,7 @@ function createChoroplethMap() {
 	  .select("#choroplethLabel")
 	  .append("svg")
 	  .attr("width", width)
-	  .attr("height", height*0.18);
+	  .attr("height", height*0.24);
   
 	// Create a gradient for the legend color scale
 	const defs = svg2.append("defs");
@@ -121,9 +121,11 @@ function createChoroplethMap() {
 	  .attr("stop-color", d3.interpolatePurples(colorScale(d3.max(Array.from(countryMedian.values())))));
   
 	// Create the legend rectangle filled with the color scale gradient
-	const legend = svg2.append("g").attr("transform", `translate(25, 10)`);
+	const legend = svg2.append("g")
+		.attr("id","Legend")
+		.attr("transform", `translate(25, 10)`);
 	
-	const legendHeight = 20;
+	legendHeight = 42;
 	legendWidth = width-40;
   
 	legend
@@ -137,7 +139,7 @@ function createChoroplethMap() {
 	  legend
 		.append("text")
 		.attr("x", legendWidth * index)
-		.attr("y", legendHeight * 2)
+		.attr("y", legendHeight * 1.5)
 		.text(Math.round(colorScale.invert(index)));
 	}
   
@@ -155,16 +157,14 @@ function createChoroplethMap() {
   
 	SPIN_T_global = d3.median(countryMedian.values())
   
-	console.log(SPIN_T_global)
-  
   
 	legend
 	  .append("circle")
 	  .attr("id","SPINcircle")
 	  .attr("cx", (d) => xScale(SPIN_T_global))
 	  .attr("cy", legendHeight*0.5)
-	  .attr("r", 5)
-	  .attr("fill", "white")
+	  .attr("r", 3.5)
+	  .attr("fill", "black")
 	  .attr("stroke", "black");
   
 	  

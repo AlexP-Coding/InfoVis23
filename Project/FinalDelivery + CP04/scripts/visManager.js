@@ -15,7 +15,10 @@ var range_min;
 var range_max;
 var xScale;
 var legendWidth;
+var legendHeight;
 var colorScale;
+var clickedCountries;
+var teste_mouse_over;
 
 // Define margins for the visualizations. 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -59,12 +62,6 @@ function startDashboard() {
 		spinAnswersData = results[2];
 		spinQuestionsData = results[3];
 		spinResultsData = results[4];
-
-	
-		/*// Convert incomeperperson and alcconsumption data to numbers
-		globalDataCapita.forEach(function (d) {
-		  d.SPIN_T = +d.SPIN_T;
-		});*/
 	
 		createChoroplethMap();
 		createLollipopChart();
