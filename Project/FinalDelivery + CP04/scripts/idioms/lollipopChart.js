@@ -1,4 +1,4 @@
-let data;
+
 function createLollipopChart() {
     // Function to create the lollipop chart
     console.log(globalData)
@@ -86,59 +86,93 @@ function createLollipopChart() {
         .text("Average SPIN_T (Median)");
 }
 
-function sortLollipopByCountryName() {
-    data.sort((a, b) => d3.ascending(a.Residence, b.Residence));
-    updateLollipopChart();
-}
 
-function sortLollipopBySpinT() {
-    data.sort((a, b) => d3.descending(a.SPIN_T, b.SPIN_T));
-    updateLollipopChart();
-}
 
-function sortLollipopByAvgHoursPlayed() {
-    // calculate average hour per country 
-    //data.sort((a, b) => d3.descending(a.AvgHoursPlayed, b.AvgHoursPlayed));
-    //updateLollipopChart();
-}
-function updateLollipopChart() {
+function updateLollipopChart(sortingOption) {
+
     const svg = d3.select("#lollipopChart").select("svg").select("g");
+    
+    console.log(globalData)
+    currentData_CM = globalData.filter(function (d) {
+        return d.Residence != "Undefined";
+    });
 
-    // Update the x domain based on the sorted data
-    x.domain(data.map(d => d.Residence));
+    const groupedData = d3.group(currentData_CM, (d) => d.Residence);
 
-    // Update the X-axis
+    countryMedian = new Map([...groupedData].map(([key, values]) => {
+        const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
+        return [key, medianSPIN_T];
+    }));
+
+    const data = Array.from(countryMedian.entries()).map(([Residence, SPIN_T]) => ({ Residence, SPIN_T }));
+
+
+    let sortedData;
+
+    if (sortingOption === 'alphabetical') {
+        sortedData = data.sort((a, b) => d3.ascending(a.Residence, b.Residence));
+    } else if (sortingOption === 'spinT') {
+        sortedData = data.sort((a, b) => d3.descending(a.SPIN_T, b.SPIN_T));
+    } else if (sortingOption === 'avgHoursPlayed') {
+        // Calculate the average hours played for each residence.
+        const avgHoursPlayedData = Array.from(groupedData).map(([Residence, values]) => {
+            const avgHoursPlayed = d3.mean(values, (d) => d.AvgHoursPlayed); // Update with the actual field name
+            return { Residence, AvgHoursPlayed: avgHoursPlayed };
+        });
+
+        // Sort the data based on average hours played.
+        sortedData = avgHoursPlayedData.sort((a, b) => d3.descending(a.AvgHoursPlayed, b.AvgHoursPlayed));
+    }
+
+
+    const x = d3.scaleBand()
+        .domain(sortedData.map(d => d.Residence)).range([0, width]);
+    
+    const y = d3.scaleBand()
+        .domain([0, d3.max(sortedData, d => d.SPIN_T)]).range([height, 0]);
+
+    // Update the X axis and tick labels.
     svg.select(".x-axis")
         .transition()
-        .duration(1000)
+        .duration(500)
         .call(d3.axisBottom(x))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-    // Update the lines
-    svg.selectAll("line")
-        .data(data)
+    // Update the lines and circles with the new data.
+    const lines = svg.selectAll(".myline")
+        .data(sortedData, d => d.Residence);
+
+    lines.exit().remove();
+
+    lines.enter()
+        .append("line")
+        .attr("class", "myline")
+        .merge(lines)
         .transition()
-        .duration(1000)
+        .duration(500)
         .attr("x1", d => x(d.Residence) + x.bandwidth() / 2)
-        .attr("x2", d => x(d.Residence) + x.bandwidth() / 2);
+        .attr("x2", d => x(d.Residence) + x.bandwidth() / 2)
+        .attr("y1", d => y(d.SPIN_T))
+        .attr("y2", y(0));
 
-    // Update the circles
-    svg.selectAll("circle")
-        .data(data)
+    const circles = svg.selectAll(".mycircle")
+        .data(sortedData, d => d.Residence);
+
+    circles.exit().remove();
+
+    circles.enter()
+        .append("circle")
+        .attr("class", "mycircle")
+        .merge(circles)
         .transition()
-        .duration(1000)
-        .attr("cx", d => x(d.Residence) + x.bandwidth() / 2);
-
-    // Redraw the chart title
-    svg.select(".chart-title")
-        .text("Average SPIN_T by Residence");
+        .duration(500)
+        .attr("cx", d => x(d.Residence) + x.bandwidth() / 2)
+        .attr("cy", d => y(d.SPIN_T))
+        .attr("r", 5)
+        .attr("fill", "purple");
 }
-
-
-
-
 
 
 
