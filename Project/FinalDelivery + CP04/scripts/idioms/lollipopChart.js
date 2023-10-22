@@ -64,7 +64,7 @@ function createLollipopChart() {
         .attr("stroke", "grey");
 
 // Circles
-    svg.selectAll("Lcircle")
+    svg.selectAll(".Lcircle")
         .data(data)
         .enter()
         .append("circle")
@@ -72,7 +72,7 @@ function createLollipopChart() {
         .attr("cy", d => yValues(d.SPIN_T))
         .attr("r", 5)
         .attr("class", "Lollipopcircle data")
-        .attr("fill", "purple");
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
 
 // Chart title
     svg.append("text")
@@ -87,7 +87,55 @@ function createLollipopChart() {
         .attr("y", -margin_lp.left + 10)
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
-        .text("Median SPIN_T");
+        .text("Average SPIN_T (Median)");
+
+    //Petals-------------------------------------------------------------------------------------------------------
+
+   /* const innerRadius = 5;
+    const outerRadius = 10;   // the outerRadius goes from the middle of the SVG area to
+    var SPIN_M_totals = d3.rollup(currentData_CM, v=> v.length, d=> d.Residence, d => d.SPIN_M)
+
+
+    // X scale
+    var xRound = d3.scaleBand()
+    .range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
+    .align(0)                  // This does nothing ?
+    .domain(Array.from(SPIN_M_totals.get("USA").keys())); // The domain of the X axis is the list of SPIN_M
+
+    //for (country on
+    // Y scale
+    var yRound = d3.scaleRadial()
+      .range([innerRadius, outerRadius])   // Domain will be define later.
+      .domain([0, 35]); // Domain of Y is from 0 to the max seen in the data
+
+    var uniqueResidences = Array.from(SPIN_M_totals.keys());*/
+      
+
+    uniqueResidences.forEach(residence => {
+        svg.append("g")
+            .data(SPIN_M_totals.get(residence))
+            .enter()
+            .attr("fill", "#69b3a2")
+            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+          .innerRadius(innerRadius)
+          .outerRadius(function(d) { return y(d['Value']); })
+          .startAngle(function(d) { return x(d.Country); })
+          .endAngle(function(d) { return x(d.Country) + x.bandwidth(); })
+          .padAngle(0.01)
+          .padRadius(innerRadius))
+
+        d3.selectAll(".Lcircle").filter(d => d.Residence == residence)
+
+      });
+       
+        
+      
+
+
+    
+
+
+
 }
 
 
@@ -156,6 +204,7 @@ function updateLollipopChart(sortingOption) {
             return xNames(d.Residence) + xNames.bandwidth() / 2;
         })
         .attr("cy", d => yValues(d.SPIN_T))
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
     
     
 }
