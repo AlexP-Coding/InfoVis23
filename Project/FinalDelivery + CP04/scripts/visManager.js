@@ -58,7 +58,8 @@ function startDashboard() {
 		
 		// Store the main data into globalDataCapita
 		globalData = results[1];
-		currentData = results[1]
+		currentData = results[1];
+		// TODO: Cast da coluna Residence para string OU usar o Unicode do país
 
 		//Load secondary data
 		spinAnswersData = results[2];
