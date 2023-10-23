@@ -271,16 +271,11 @@ function updateLollipopChart(sortingOption) {
             return xNames(d.Residence) + xNames.bandwidth() / 2;
         })
         .attr("cy", d => yValues(d.SPIN_T))
-        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
-        /*.each(function (d) {
-            // Save the circle information (cx, cy, and Residence) for each circle
-            circleInfo.push({
-                cx: parseFloat(d3.select(this).attr("cx")),
-                cy: parseFloat(d3.select(this).attr("cy")),
-                Residence: d.Residence
-            });
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
+        .each(function (d) {
+            console.log(d.Residence)
 
-        });*/
+        });
 
 
     // Now, residenceDataMap will contain a Map with each residence as the key and the corresponding data frame as the value
@@ -289,25 +284,25 @@ function updateLollipopChart(sortingOption) {
     
 
     for(circle of circleInfo){
-
-
-
         
-        const correspondingObject = sortedData.find(d => d.Residence === circle.Residence)
+        const correspondingObject = sortedData.find(d => d.Residence == circle.Residence)
 
         console.log(correspondingObject.Residence)
+        console.log(xNames(correspondingObject.Residence))
 
         x = xNames(correspondingObject.Residence) + xNames.bandwidth() / 2;
         y =  yValues(correspondingObject.SPIN_T)
        
-        
-        d3.select("#g_"+circle.Residence)
+        group = "#g_"+circle.Residence
+
+        d3.selectAll(group)
             .transition()
             .duration(1000)
             .attr("transform", `translate(${x},${y})`)
-            
+
 
     }
+
     
 }
 
