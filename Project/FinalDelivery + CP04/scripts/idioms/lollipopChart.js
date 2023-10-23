@@ -2,23 +2,19 @@ var xNames;
 var yValues;
 var width_lp;
 var height_lp;
-var circleInfo = [];
+var residenceDataMap;
 
 function createLollipopChart() {
     // Function to create the lollipop chart
-    const groupedData = d3.group(currentData_CM, (d) => d.Residence);
+    //const groupedData = d3.group(currentData_CM, (d) => d.Residence);
 
-    /*countryMedian = new Map([...groupedData].map(([key, values]) => {
-        const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
-        return [key, medianSPIN_T];
-    }));*/
     
     // mexer aqui para alterar o tamanho do chart!!!!!
     const margin_lp = { top: 10, right: 10, bottom: 90, left: 40 }; // Adjusted left margin_lp for labels
     width_lp = 1500 - margin_lp.left - margin_lp.right; // Increased width
     height_lp = 240 - margin_lp.top - margin_lp.bottom;
 
-// Append the SVG object to the body of the page
+    // Append the SVG object to the body of the page
     const svg = d3.select("#lollipopChart")
         .append("svg")
         .attr("width", width_lp + margin_lp.left + margin_lp.right)
@@ -77,15 +73,8 @@ function createLollipopChart() {
         .attr("class", "Lollipopcircle data")
         .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
         .on("mouseover", handleMouseOverCountry)
-        .on("mouseout", handleMouseOutCountry)
-        .each(function (d) {
-            // Save the circle information (cx, cy, and Residence) for each circle
-            circleInfo.push({
-                cx: parseFloat(d3.select(this).attr("cx")),
-                cy: parseFloat(d3.select(this).attr("cy")),
-                Residence: d.Residence
-            });
-        });
+        .on("mouseout", handleMouseOutCountry);
+        
 
 
     // Chart title
@@ -93,7 +82,8 @@ function createLollipopChart() {
         .attr("x", width_lp / 2)
         .attr("y", margin_lp.top)
         .attr("text-anchor", "middle")
-        .text("Median SPIN_T by Residence");
+        .text("Median SPIN_T by Residence")
+        .style("font-family", "Arial, sans-serif");
 
     // Label for Y-axis
     svg.append("text")
@@ -101,12 +91,12 @@ function createLollipopChart() {
         .attr("y", -margin_lp.left + 10)
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
-        .text("Average SPIN_T (Median)");
-
+        .text("Average SPIN_T (Median)")
+        .style("font-family", "Arial, sans-serif");
     
    
 
-    //Petals-------------------------------------------------------------------------------------------------------
+   //Petals-------------------------------------------------------------------------------------------------------
     
     
 
@@ -128,10 +118,10 @@ function createLollipopChart() {
     });
     }); 
 
-    console.log(SPIN_M_totals)
+    //console.log(SPIN_M_totals)
 
     // Create a Map to store the separate data frames for each residence
-    const residenceDataMap = new Map();
+    residenceDataMap = new Map();
 
     // Iterate through the main map (SPIN_M_totals)
     SPIN_M_totals.forEach((residenceMap, residence) => {
@@ -156,7 +146,7 @@ function createLollipopChart() {
 
     
 
-    for(circle of circleInfo){
+    /*for(circle of circleInfo){
 
        max_value = d3.max(residenceDataMap.get(circle.Residence), d => d.Value)
 
@@ -166,7 +156,7 @@ function createLollipopChart() {
 
         svg
         .append("g")
-            .attr("id","g_"+circle.Residence)
+            .attr("id",circle.Residence.replace(/ /g, "_").replace(/&/g, "and"))
             .attr("transform", `translate(${circle.cx},${circle.cy})`)
             .selectAll("path")
             .data(residenceDataMap.get(circle.Residence))
@@ -180,7 +170,37 @@ function createLollipopChart() {
                 .padAngle(2)
                 .padRadius(5))
 
+    }*/
+
+    for (key of residenceDataMap.keys()){
+
+        max_value = d3.max(residenceDataMap.get(key), d => d.Value)
+
+        const correspondingObject = data.find(d => d.Residence == key)
+
+        var yScale_p = d3.scaleRadial()
+            .range([5, 20])   // Domain will be define later.
+            .domain([0,max_value]); // Domain of Y is from 0 to the max seen in the data
+
+            svg
+            .append("g")
+                .attr("class","Petals")
+                .attr("id",key.replace(/ /g, "_").replace(/&/g, "and"))
+                .attr("transform", `translate(${xNames(correspondingObject.Residence) + xNames.bandwidth() / 2},${yValues(correspondingObject.SPIN_T)})`)
+                .selectAll("path")
+                .data(residenceDataMap.get(key))
+                .join("path")
+                .attr("fill", "red")
+                .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+                    .innerRadius(5)
+                    .outerRadius(d => yScale_p(d.Value))
+                    .startAngle(d => xScale_p(d.Variable))
+                    .endAngle(d => xScale_p(d.Variable) + xScale_p.bandwidth())
+                    .padAngle(2)
+                    .padRadius(5))
+
     }
+
 
 
 
@@ -206,16 +226,11 @@ function createLollipopChart() {
 
 
 
+
 function updateLollipopChart(sortingOption) {
 
-    const groupedData = d3.group(currentData_CM, (d) => d.Residence);
 
-    /*countryMedian = new Map([...groupedData].map(([key, values]) => {
-        const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
-        return [key, medianSPIN_T];
-    }));*/
-
-    const data = Array.from(countryMedian.entries()).map(([Residence, SPIN_T]) => ({ Residence, SPIN_T }));
+    const data = Array.from(countryMedian.entries()).map(([Residence, SPIN_T]) => ({Residence, SPIN_T}));
 
 
     let sortedData = data;
@@ -240,8 +255,8 @@ function updateLollipopChart(sortingOption) {
         .domain(sortedData.map(d => d.Residence)).range([0, width_lp]);
 
     
-    yValues = d3.scaleLinear()
-        .domain([0, d3.max(sortedData, d => d.SPIN_T)]).range([height_lp, 0]);
+    //yValues = d3.scaleLinear()
+    //    .domain([0, d3.max(sortedData, d => d.SPIN_T)]).range([height_lp, 0]);
 
     d3.select("#xAxis")
         .transition()
@@ -252,56 +267,164 @@ function updateLollipopChart(sortingOption) {
         .style("text-anchor", "end");
 
 
-    d3.selectAll(".LollipopLine")
-        .data(sortedData)
-        .transition()
+    // Select all lines with class "LollipopLine"
+    var lines = d3.selectAll(".LollipopLine")
+        .data(sortedData);
+
+    // Transition for updating lines (lines that existed before)
+    lines.transition()
         .duration(1000)
         .attr("x1", d => xNames(d.Residence) + xNames.bandwidth() / 2)
         .attr("x2", d => xNames(d.Residence) + xNames.bandwidth() / 2)
         .attr("y1", d => yValues(d.SPIN_T))
         .attr("y2", yValues(0))
+        .style("display", "block"); // Show the lines
+
+    // Enter selection for new data points
+    lines.enter()
+        .append("line")
+        .attr("class", "LollipopLine")
+        .attr("x1", d => xNames(d.Residence) + xNames.bandwidth() / 2)
+        .attr("x2", d => xNames(d.Residence) + xNames.bandwidth() / 2)
+        .attr("y1", d => yValues(d.SPIN_T))
+        .attr("y2", yValues(0));
+
+    // Exit selection for lines that need to be removed
+    lines.exit()
+        .style("display", "none"); // Hide the lines
+
 
     //circleInfo = [];
+//---------------------------------------------------------------------------Circle Update
 
-    d3.selectAll(".Lollipopcircle")
-        .data(sortedData)
-        .transition()
+
+    // Select all circles with class "Lollipopcircle"
+    var circles = d3.selectAll(".Lollipopcircle")
+        .data(sortedData, function (d) {
+            return d.Residence; // Use a key function to identify data points
+        });
+
+    // Transition for updating circles (circles that existed before)
+    circles.transition()
         .duration(1000)
-        .attr("cx", function (d){
+        .attr("cx", function (d) {
             return xNames(d.Residence) + xNames.bandwidth() / 2;
         })
         .attr("cy", d => yValues(d.SPIN_T))
         .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
-        .each(function (d) {
-            console.log(d.Residence)
+        .style("display", "block"); // Show the circles
 
-        });
+    // Enter selection for new data points
+    circles.enter()
+        .append("circle")
+        .attr("class", "Lollipopcircle")
+        .attr("cx", function (d) {
+            return xNames(d.Residence) + xNames.bandwidth() / 2;
+        })
+        .attr("cy", d => yValues(d.SPIN_T))
+        .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
+
+    // Exit selection for circles that need to be removed
+    circles.exit()
+        .style("display", "none"); // Hide the circles
+
 
 
     // Now, residenceDataMap will contain a Map with each residence as the key and the corresponding data frame as the value
-    console.log(circleInfo);
+    //console.log(circleInfo);
 
+   //---------------------------------Petals--------------------------------------------------------------
+
+   const allVariables = new Set(currentData_CM.map(d => d.SPIN_M));
+
+    // Create a rollup using the set of all variables
+    var SPIN_M_totals = d3.rollup(currentData_CM, 
+    v => v.length, 
+    d => d.Residence, 
+    d => d.SPIN_M
+    );
     
+   // Iterate through all variables and fill in missing variables with a value of zero
+   allVariables.forEach(variable => {
+    SPIN_M_totals.forEach((residenceMap, residence) => {
+      if (!residenceMap.has(variable)) {
+        residenceMap.set(variable, 0);
+      }
+    });
+    }); 
 
-    for(circle of circleInfo){
+    // Create a Map_2 to store the separate data frames for each residence
+    const residenceDataMap_2 = new Map();
+
+    // Iterate through the main map (SPIN_M_totals)
+    SPIN_M_totals.forEach((residenceMap, residence) => {
+    // Convert each residence's data into a data frame
+    const dataFrame = Array.from(residenceMap, ([variable, value]) => ({
+        Variable: variable,
+        Value: value,
+    }));
+    
+    // Set the data frame as the value in the residenceDataMap with the residence as the key
+    residenceDataMap_2.set(residence, dataFrame);
+    });
+
+    // Now, residenceDataMap will contain a Map with each residence as the key and the corresponding data frame as the value
+    console.log(residenceDataMap_2);
+
+    for (key of residenceDataMap.keys()){
+
+        if(residenceDataMap_2.has(key)){
+            const correspondingObject = sortedData.find(d => d.Residence == key)
+
+            x = xNames(correspondingObject.Residence) + xNames.bandwidth() / 2;
+            y =  yValues(correspondingObject.SPIN_T)
+
+            const elementId = "#"+key.replace(/ /g, "_").replace(/&/g, "and");
+            const element = d3.select(elementId);
+            if (element) {
+                element
+                .transition()
+                .duration(1000)
+                .attr("transform", `translate(${x},${y})`)
+                .style("display", "block"); // Show the element
+            }
+        }
+        else{
+            // Key does not exist in residenceDataMap_2, hide the element
+            const elementId ="#"+key.replace(/ /g, "_").replace(/&/g, "and");
+            const element = d3.select(elementId);
+            if (element) {
+                element.style("display", "none"); // Hide the element
+            }
+        }
+    }
+
+ /*   for(circle of circleInfo){
         
         const correspondingObject = sortedData.find(d => d.Residence == circle.Residence)
 
-        console.log(correspondingObject.Residence)
-        console.log(xNames(correspondingObject.Residence))
+        //console.log(correspondingObject.Residence)
+        //console.log(xNames(correspondingObject.Residence))
 
         x = xNames(correspondingObject.Residence) + xNames.bandwidth() / 2;
         y =  yValues(correspondingObject.SPIN_T)
        
-        group = "#g_"+circle.Residence
+        group = ("#"+circle.Residence.replace(/ /g, "_").replace(/&/g, "and"))
 
-        d3.selectAll(group)
+
+
+        d3.select(group)
             .transition()
             .duration(1000)
             .attr("transform", `translate(${x},${y})`)
+        .each(function() {
+            console.log("Group ID2: " + this.id);
+        })
 
 
-    }
+    }*/
+
+
 
     
 }

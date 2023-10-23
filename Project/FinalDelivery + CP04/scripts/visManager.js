@@ -20,6 +20,7 @@ var legendHeight;
 var colorScale;
 var clickedCountries;
 var teste_mouse_over;
+var groupedData;
 
 // Define margins for the visualizations. 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -83,6 +84,20 @@ function startDashboard() {
 
 // This function updates the visualizations based on the selected data type(s).
 function updateIdioms() {
+
+	currentData_CM = globalData.filter(function (d) {
+		return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
+	});
+	
+	
+	groupedData = d3.group(currentData_CM, (d) => d.Residence);
+	
+	
+	countryMedian = new Map([...groupedData].map(([key, values]) => {
+		const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
+		return [key, medianSPIN_T];
+	}));
+
 	updateChoropleth();
 	updateLollipopChart();	
 // TODO	updateCustomIdiom(data);

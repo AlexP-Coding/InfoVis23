@@ -5,7 +5,7 @@ function createChoroplethMap() {
 	  return d.Residence != "Undefined";
 	});
   
-	const groupedData = d3.group(currentData_CM, (d) => d.Residence);
+	groupedData = d3.group(currentData_CM, (d) => d.Residence);
   
 	countryMedian = new Map([...groupedData].map(([key, values]) => {
 	  const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
@@ -262,18 +262,6 @@ function updateChoropleth() {
 // MapUpdate(), just renamed and moved from linked.js
 function updateChoropleth(){
 
-	
-	currentData_CM_update = globalData.filter(function (d) {
-	  return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
-	});
-  
-	const groupedData = d3.group(currentData_CM_update, (d) => d.Residence);
-  
-  
-	countryMedian = new Map([...groupedData].map(([key, values]) => {
-	  const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
-	  return [key, medianSPIN_T];
-	}));
   
 	const countriesInMap = Array.from(countryMedian.keys());
 	
