@@ -63,8 +63,8 @@ function createLollipopChart() {
         .attr("y2", yValues(0))
         .attr("class","LollipopLine data")
         .attr("stroke", "grey")
-        .on("mouseover", handleMouseOverCM)
-        .on("mouseout", handleMouseOutCM);
+        .on("mouseover", handleMouseOverCountry)
+        .on("mouseout", handleMouseOutCountry);
 
     // Circles
     svg.selectAll(".Lcircle")
@@ -76,8 +76,8 @@ function createLollipopChart() {
         .attr("r", 5)
         .attr("class", "Lollipopcircle data")
         .attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
-        .on("mouseover", handleMouseOverCM)
-        .on("mouseout", handleMouseOutCM)
+        .on("mouseover", handleMouseOverCountry)
+        .on("mouseout", handleMouseOutCountry)
         .each(function (d) {
             // Save the circle information (cx, cy, and Residence) for each circle
             circleInfo.push({
