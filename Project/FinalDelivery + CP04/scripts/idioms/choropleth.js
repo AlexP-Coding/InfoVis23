@@ -241,14 +241,14 @@ function createChoroplethMap() {
 	  .attr("id","range_min_text")
 	  .attr("x", (d) => xScale(range_min)-4.4)
 	  .attr("y", height*0.03+9)
-	  .text(range_min);
+	  .text(range_min.toFixed(2));
   
 	select_max
 	  .append("text")
 	  .attr("id","range_max_text")
 	  .attr("x", (d) => xScale(range_max)-4.4)
 	  .attr("y", height*0.03+9)
-	  .text(range_max);
+	  .text(range_max.toFixed(2));
   
 	
 }
@@ -295,5 +295,5 @@ function updateChoropleth(){
 		circles.element.attr("cx",(d) => xScale(countryMedian.get(circles.country)))
 		
 	}
-  
+
   }
