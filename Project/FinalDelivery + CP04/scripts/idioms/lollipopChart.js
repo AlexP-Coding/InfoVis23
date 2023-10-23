@@ -3,6 +3,8 @@ var yValues;
 var width_lp;
 var height_lp;
 var residenceDataMap;
+var xScale_p;
+var allVariables;
 
 function createLollipopChart() {
     // Function to create the lollipop chart
@@ -100,7 +102,7 @@ function createLollipopChart() {
     
     
 
-    const allVariables = new Set(currentData_CM.map(d => d.SPIN_M));
+   allVariables = new Set(currentData_CM.map(d => d.SPIN_M));
 
     // Create a rollup using the set of all variables
     var SPIN_M_totals = d3.rollup(currentData_CM, 
@@ -139,7 +141,7 @@ function createLollipopChart() {
     console.log(residenceDataMap);
 
     // X scale
-    var xScale_p = d3.scaleBand()
+    xScale_p = d3.scaleBand()
         .range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
         .align(0)                  // This does nothing ?
         .domain(residenceDataMap.get('USA').map(d => d.Variable)); // The domain of the X axis is the list of states.
@@ -335,7 +337,6 @@ function updateLollipopChart(sortingOption) {
 
    //---------------------------------Petals--------------------------------------------------------------
 
-   const allVariables = new Set(currentData_CM.map(d => d.SPIN_M));
 
     // Create a rollup using the set of all variables
     var SPIN_M_totals = d3.rollup(currentData_CM, 
@@ -369,12 +370,12 @@ function updateLollipopChart(sortingOption) {
     });
 
     // Now, residenceDataMap will contain a Map with each residence as the key and the corresponding data frame as the value
-    console.log(residenceDataMap_2);
+    //console.log(residenceDataMap_2);
 
     for (key of residenceDataMap.keys()){
 
         if(residenceDataMap_2.has(key)){
-            const correspondingObject = sortedData.find(d => d.Residence == key)
+        const correspondingObject = sortedData.find(d => d.Residence == key)
 
             x = xNames(correspondingObject.Residence) + xNames.bandwidth() / 2;
             y =  yValues(correspondingObject.SPIN_T)
@@ -388,6 +389,46 @@ function updateLollipopChart(sortingOption) {
                 .attr("transform", `translate(${x},${y})`)
                 .style("display", "block"); // Show the element
             }
+
+            max_value = d3.max(residenceDataMap_2.get(key), d => d.Value)
+
+            var yScale_p = d3.scaleRadial()
+            .range([5, 20])   // Domain will be define later.
+            .domain([0,max_value]); // Domain of Y is from 0 to the max seen in the data
+
+            /*const correspondingObject = sortedData.find(d => d.Residence == key)
+
+            const elementId = "#"+key.replace(/ /g, "_").replace(/&/g, "and");
+            const element = d3.select(elementId);*/
+
+            console.log(residenceDataMap_2.get(key),key)
+
+            var paths = element
+                .attr("transform", `translate(${xNames(correspondingObject.Residence) + xNames.bandwidth() / 2},${yValues(correspondingObject.SPIN_T)})`)
+                .selectAll("path")
+                .style("display", "block")
+                .data(residenceDataMap_2.get(key));
+
+            // Exit: Remove any old paths that are not in the updated data
+            paths.exit().remove();
+
+            var enterPaths = paths.enter()
+            .append("path")
+            .attr("fill", "red");
+
+            // Update: Update the attributes of existing and new paths with a transition
+            paths = enterPaths.merge(paths)
+                .transition() // Add a transition
+                .duration(1000) // Set the duration of the transition in milliseconds
+                .attr("d", d3.arc()
+                    .innerRadius(5)
+                    .outerRadius(d => yScale_p(d.Value))
+                    .startAngle(d => xScale_p(d.Variable))
+                    .endAngle(d => xScale_p(d.Variable) + xScale_p.bandwidth())
+                    .padAngle(2)
+                    .padRadius(5));
+
+
         }
         else{
             // Key does not exist in residenceDataMap_2, hide the element
@@ -397,6 +438,8 @@ function updateLollipopChart(sortingOption) {
                 element.style("display", "none"); // Hide the element
             }
         }
+
+
     }
 
  /*   for(circle of circleInfo){
