@@ -58,9 +58,9 @@ function createChoroplethMap() {
 	  .attr("class", "country data")
 	  .attr("d", path)
 	  .attr("stroke", "black")
-	  .on("mouseover", handleMouseOverCM) // Function to handle mouseover event
-	  .on("mouseout", handleMouseOutCM)   // Function to handle mouseout 
-	  .on("click" , handleClickCM)
+	  .on("mouseover", handleMouseOverCountry) // Function to handle mouseover event
+	  .on("mouseout", handleMouseOutCountry)   // Function to handle mouseout 
+	  .on("click" , handleClickCountry)
 	  .append("title")
 	  .text((d) => d.properties.name);
   

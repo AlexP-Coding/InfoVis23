@@ -52,7 +52,7 @@ function handleDragMax(event){
 clickedCountries = []
 var new_circle_y = 0;
 
-function handleClickCM(event,item){
+function handleClickCountry(event,item){
 
   let countriesInMap = Array.from(countryMedian.keys())
 
@@ -80,8 +80,8 @@ function handleClickCM(event,item){
         .attr("r", 3.5)
         .attr("fill", "white")
         .attr("stroke", "black")
-        .on("mouseover", handleMouseOverCM)
-        .on("mouseout", handleMouseOutCM);
+        .on("mouseover", handleMouseOverCountry)
+        .on("mouseout", handleMouseOutCountry);
   
       clickedCountries.push({ country: item.properties.name, element: newCircle });
     }
@@ -98,7 +98,7 @@ function handleClickCM(event,item){
 
 //Mouse Over Choropleth
 
-function handleMouseOverCM(event,item){
+function handleMouseOverCountry(event,item){
 
   // Select all elements with class "data" and filter based on the item's properties
   //console.log(d3.selectAll(".data"))
@@ -124,7 +124,7 @@ function handleMouseOverCM(event,item){
 
 //Mouse Out Choropleth
 
-function handleMouseOutCM (event, item) {
+function handleMouseOutCountry (event, item) {
   // Filter the current data to remove entries with missing incomeperperson values
   let countriesInMap = Array.from(countryMedian.keys())
 
