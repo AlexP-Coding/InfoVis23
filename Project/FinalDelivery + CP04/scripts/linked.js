@@ -119,7 +119,52 @@ function handleMouseOverCountry(event,item){
     })
     .attr("stroke", "green")
     .attr("stroke-width", 2.5); // Change the border color of the matching elements to green
+  
+    
+  Tooltip
+    .style("opacity", 1)
+    .style("left", event.pageX + 10 + "px")
+    .style("top", event.pageY + 10 + "px")
+  if ("properties" in item)
+  {
+    const linkedMap = residenceDataMap_2.get(item.properties.name);
+    Tooltip.html(`<div>Country: ${item.properties.name}</div>`);
 
+    function addDataLine(variableName) {
+        const entry = linkedMap.find(entry => entry.Variable === variableName);
+        if (entry) {
+            Tooltip.html(Tooltip.html() + `<div>${variableName}: ${entry.Value}</div>`);
+        }
+    }
+
+    // Add lines for "Very Severe" to "Undefined" conditionally
+    addDataLine('Very severe');
+    addDataLine('Severe');
+    addDataLine('Moderate');
+    addDataLine('Mild');
+    addDataLine('None');
+    addDataLine('Undefined');
+  }
+  else
+  {
+    const linkedMap = residenceDataMap_2.get(item.Residence);
+    Tooltip.html(`<div>Country: ${item.Residence}</div>`);
+
+    function addDataLine(variableName) {
+        const entry = linkedMap.find(entry => entry.Variable === variableName);
+        if (entry) {
+            Tooltip.html(Tooltip.html() + `<div>${variableName}: ${entry.Value}</div>`);
+        }
+    }
+
+    // Add lines for "Very Severe" to "Undefined" conditionally
+    addDataLine('Very severe');
+    addDataLine('Severe');
+    addDataLine('Moderate');
+    addDataLine('Mild');
+    addDataLine('None');
+    addDataLine('Undefined');
+  }
 }
 
 //Mouse Out Choropleth
@@ -143,6 +188,12 @@ function handleMouseOutCountry (event, item) {
 
   d3.selectAll(".Lollipopcircle.data")
     .attr("stroke","none")
+
+  Tooltip
+    .style("opacity", 0)
+  d3.selectAll(this)
+    .style("stroke", "none")
+    .style("opacity", 0.8)
 
 }
 

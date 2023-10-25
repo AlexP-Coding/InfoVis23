@@ -5,6 +5,7 @@ var height_lp;
 var residenceDataMap;
 var xScale_p;
 var allVariables;
+var residenceDataMap_2;
 
 function createLollipopChart() {
     // Function to create the lollipop chart
@@ -137,8 +138,10 @@ function createLollipopChart() {
     residenceDataMap.set(residence, dataFrame);
     });
 
+    residenceDataMap_2 = residenceDataMap
+
     // Now, residenceDataMap will contain a Map with each residence as the key and the corresponding data frame as the value
-    console.log(residenceDataMap);
+    //console.log(residenceDataMap);
 
     // X scale
     xScale_p = d3.scaleBand()
@@ -355,7 +358,7 @@ function updateLollipopChart(sortingOption) {
     }); 
 
     // Create a Map_2 to store the separate data frames for each residence
-    const residenceDataMap_2 = new Map();
+    residenceDataMap_2 = new Map();
 
     // Iterate through the main map (SPIN_M_totals)
     SPIN_M_totals.forEach((residenceMap, residence) => {
