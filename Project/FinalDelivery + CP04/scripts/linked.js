@@ -193,8 +193,7 @@ function handleMouseOutCountry (event, item) {
       .attr("stroke", "black")
       .attr("stroke-width",1);
 
-  d3.selectAll(".ScatterCircle.data")
-      .attr("stroke", "none")
+ 
     
 
   Tooltip
@@ -202,6 +201,7 @@ function handleMouseOutCountry (event, item) {
   d3.selectAll(this)
     .style("stroke", "none")
     .style("opacity", 0.8)
+    
 
 }
 
