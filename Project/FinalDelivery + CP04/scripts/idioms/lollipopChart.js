@@ -404,7 +404,7 @@ function updateLollipopChart(sortingOption) {
             const elementId = "#"+key.replace(/ /g, "_").replace(/&/g, "and");
             const element = d3.select(elementId);*/
 
-            console.log(residenceDataMap_2.get(key),key)
+            //console.log(residenceDataMap_2.get(key),key)
 
             var paths = element
                 .attr("transform", `translate(${xNames(correspondingObject.Residence) + xNames.bandwidth() / 2},${yValues(correspondingObject.SPIN_T)})`)
