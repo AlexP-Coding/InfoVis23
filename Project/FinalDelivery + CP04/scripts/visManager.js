@@ -94,8 +94,6 @@ function updateIdioms() {
 	currentData_CM = globalData.filter(function (d) {
 		return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
 	});
-	
-	console.log(currentData_CM)
 
 	groupedData = d3.group(currentData_CM, (d) => d.Residence);
 	
@@ -107,7 +105,7 @@ function updateIdioms() {
 
 	updateChoropleth();
 	updateLollipopChart();	
-	//updateSankey();
+	updateSankey();
 // TODO	updateScatterplot(data);
 }
 
