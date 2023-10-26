@@ -75,7 +75,7 @@ function startDashboard() {
 		createLollipopChart();
 		Tooltip = createTooltip();
 	//	createCustomIdiom();
-// TODO		createSankey();
+		createSankey();
 // TODO		createScatterplot();
 	
 	})
@@ -95,7 +95,8 @@ function updateIdioms() {
 		return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
 	});
 	
-	
+	console.log(currentData_CM)
+
 	groupedData = d3.group(currentData_CM, (d) => d.Residence);
 	
 	
@@ -106,8 +107,7 @@ function updateIdioms() {
 
 	updateChoropleth();
 	updateLollipopChart();	
-// TODO	updateCustomIdiom(data);
-// TODO	updateSankey(data);
+	//updateSankey();
 // TODO	updateScatterplot(data);
 }
 

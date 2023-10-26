@@ -18,13 +18,18 @@
 	</style>
 	<!-- Load the D3.js library for data visualization -->
 	<script src="https://d3js.org/d3.v7.js"></script>
+	<script src="https://unpkg.com/d3-array@1"></script>
+	<script src="https://unpkg.com/d3-collection@1"></script>
+	<script src="https://unpkg.com/d3-path@1"></script>
+	<script src="https://unpkg.com/d3-shape@1"></script>
+	<script src="https://unpkg.com/d3-sankey@0"></script>
   <!-- Needed to load JSON file -->
 	  
   <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 	<!-- Load JavaScript files for the dashboard -->
 	<script src="scripts/visManager.js"></script>
 	<script src="scripts/idioms/choropleth.js"></script>
-	<script src="scripts/idioms/customIdiom.js"></script>
+	<!--script src="scripts/idioms/customIdiom.js"></script!-->
 	<script src="scripts/idioms/lollipopChart.js"></script>
    <script src="scripts/idioms/sankey.js"></script>
    <script src="scripts/idioms/scatterplot.js"></script>
@@ -54,7 +59,7 @@
 	  <!-- Visualization area for the scatter plot -->
 	  <div class="visualization" id="scatterplot"></div>
 	  <!-- Visualization area for the lollipop chart -->
-			  <div class="visualization" id="customIdiom"></div>
+			  <!--div class="visualization" id="customIdiom"></div>
 		
 	</div>
   </body>
