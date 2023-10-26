@@ -5,7 +5,7 @@ function createChoroplethMap() {
 	  return d.Residence != "Undefined";
 	});
   
-	const groupedData = d3.group(currentData_CM, (d) => d.Residence);
+	groupedData = d3.group(currentData_CM, (d) => d.Residence);
   
 	countryMedian = new Map([...groupedData].map(([key, values]) => {
 	  const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
@@ -58,9 +58,9 @@ function createChoroplethMap() {
 	  .attr("class", "country data")
 	  .attr("d", path)
 	  .attr("stroke", "black")
-	  .on("mouseover", handleMouseOverCM) // Function to handle mouseover event
-	  .on("mouseout", handleMouseOutCM)   // Function to handle mouseout 
-	  .on("click" , handleClickCM)
+	  .on("mouseover", handleMouseOverCountry) // Function to handle mouseover event
+	  .on("mouseout", handleMouseOutCountry)   // Function to handle mouseout 
+	  .on("click" , handleClickCountry)
 	  .append("title")
 	  .text((d) => d.properties.name);
   
@@ -241,14 +241,14 @@ function createChoroplethMap() {
 	  .attr("id","range_min_text")
 	  .attr("x", (d) => xScale(range_min)-4.4)
 	  .attr("y", height*0.03+9)
-	  .text(range_min);
+	  .text(range_min.toFixed(2));
   
 	select_max
 	  .append("text")
 	  .attr("id","range_max_text")
 	  .attr("x", (d) => xScale(range_max)-4.4)
 	  .attr("y", height*0.03+9)
-	  .text(range_max);
+	  .text(range_max.toFixed(2));
   
 	
 }
@@ -262,18 +262,6 @@ function updateChoropleth() {
 // MapUpdate(), just renamed and moved from linked.js
 function updateChoropleth(){
 
-	
-	currentData_CM_update = globalData.filter(function (d) {
-	  return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
-	});
-  
-	const groupedData = d3.group(currentData_CM_update, (d) => d.Residence);
-  
-  
-	countryMedian = new Map([...groupedData].map(([key, values]) => {
-	  const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
-	  return [key, medianSPIN_T];
-	}));
   
 	const countriesInMap = Array.from(countryMedian.keys());
 	
@@ -295,5 +283,5 @@ function updateChoropleth(){
 		circles.element.attr("cx",(d) => xScale(countryMedian.get(circles.country)))
 		
 	}
-  
+
   }

@@ -20,6 +20,11 @@ var legendHeight;
 var colorScale;
 var clickedCountries;
 var teste_mouse_over;
+var groupedData;
+
+//Tooltip
+
+var Tooltip
 
 // Define margins for the visualizations. 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
@@ -58,7 +63,8 @@ function startDashboard() {
 		
 		// Store the main data into globalDataCapita
 		globalData = results[1];
-		currentData = results[1]
+		currentData = results[1];
+		// TODO: Cast da coluna Residence para string OU usar o Unicode do país
 
 		//Load secondary data
 		spinAnswersData = results[2];
@@ -67,6 +73,7 @@ function startDashboard() {
 	
 		createChoroplethMap();
 		createLollipopChart();
+		Tooltip = createTooltip();
 	//	createCustomIdiom();
 // TODO		createSankey();
 // TODO		createScatterplot();
@@ -83,9 +90,42 @@ function startDashboard() {
 
 // This function updates the visualizations based on the selected data type(s).
 function updateIdioms() {
+
+	currentData_CM = globalData.filter(function (d) {
+		return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
+	});
+	
+	
+	groupedData = d3.group(currentData_CM, (d) => d.Residence);
+	
+	
+	countryMedian = new Map([...groupedData].map(([key, values]) => {
+		const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
+		return [key, medianSPIN_T];
+	}));
+
 	updateChoropleth();
 	updateLollipopChart();	
 // TODO	updateCustomIdiom(data);
 // TODO	updateSankey(data);
 // TODO	updateScatterplot(data);
 }
+
+function createTooltip(){
+
+	var Tooltip = d3
+	  .select("body")
+	  .append("div")
+	  .style("opacity", 0)
+	  .attr("class", "d3-tooltip")
+	  .style("background-color", "white")
+	  .style("border", "solid")
+	  .style("border-width", "2px")
+	  .style("border-radius", "5px")
+	  .style("padding", "5px")
+	  .style("position", "absolute") // Set the position to "absolute"
+	  .style("left", "0px") // Set the initial left position (modify as needed)
+	  .style("top", "0px"); // Set the initial top position (modify as needed)
+	  // Return the tooltip reference
+	return Tooltip;
+  }

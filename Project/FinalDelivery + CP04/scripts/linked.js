@@ -23,7 +23,7 @@ function handleDragMin(event){
 	  d3.select("#range_min_text").attr("x",new_min_x-4.4)
     
 	  range_min = xScale.invert(new_min_x)
-	  d3.select("#range_min_text").text(range_min)
+	  d3.select("#range_min_text").text(range_min.toFixed(2))
 	}
   
   // TODO: switch to current data rather than global once CD is the one being updated
@@ -41,7 +41,7 @@ function handleDragMax(event){
 	  d3.select("#range_max_text").attr("x",new_max_x-4.4);
   
 	  range_max = xScale.invert(new_max_x)
-	  d3.select("#range_max_text").text(range_max)
+	  d3.select("#range_max_text").text(range_max.toFixed(2))
 	}
   
   // TODO: switch to current data rather than global once CD is the one being updated
@@ -52,14 +52,12 @@ function handleDragMax(event){
 clickedCountries = []
 var new_circle_y = 0;
 
-function handleClickCM(event,item){
+function handleClickCountry(event,item){
 
   let countriesInMap = Array.from(countryMedian.keys())
 
-  const countryMedianArray = Array.from(countryMedian, ([country, value]) => ({ country, value }));
+  const countryMedianArray = Array.from(countryMedian, ([Residence, value]) => ({ Residence, value }));
 
-  //console.log(countryMedianArray)
-  
   let existingCircleIndex = clickedCountries.findIndex((markData) => markData.country == item.properties.name);
 
   if(existingCircleIndex !== -1){
@@ -69,21 +67,21 @@ function handleClickCM(event,item){
   else {
     if (countriesInMap.includes(item.properties.name)) {
       const filteredData = countryMedianArray.filter(function (d) {
-        return d.country === item.properties.name;
+        return d.Residence === item.properties.name;
       });
   
       const newCircle = d3.select("#Legend")
         .append("circle")
         .data(filteredData)
         .attr("class", "ChoroplethScale data")
-        .attr("country", item.properties.name)
-        .attr("cx", (d) => xScale(countryMedian.get(d.country)))
+        .attr("Residence", item.properties.name)
+        .attr("cx", (d) => xScale(countryMedian.get(d.Residence)))
         .attr("cy", new_circle_y)
         .attr("r", 3.5)
         .attr("fill", "white")
         .attr("stroke", "black")
-        .on("mouseover", handleMouseOverCM)
-        .on("mouseout", handleMouseOutCM);
+        .on("mouseover", handleMouseOverCountry)
+        .on("mouseout", handleMouseOutCountry);
   
       clickedCountries.push({ country: item.properties.name, element: newCircle });
     }
@@ -100,7 +98,7 @@ function handleClickCM(event,item){
 
 //Mouse Over Choropleth
 
-function handleMouseOverCM(event,item){
+function handleMouseOverCountry(event,item){
 
   // Select all elements with class "data" and filter based on the item's properties
   //console.log(d3.selectAll(".data"))
@@ -111,38 +109,91 @@ function handleMouseOverCM(event,item){
           return item.properties.name == d.properties.name;
         } 
         else {
-          return item.properties.name == d.country;
+          return item.properties.name == d.Residence;
         }
       } else if ("properties" in d) {
-        return item.country == d.properties.name;
+        return item.Residence == d.properties.name;
       } else {
-        return item.country == d.country;
+        return item.Residence == d.Residence;
       }
     })
-    .attr("fill", "green"); // Change the fill color of the matching elements to red
+    .attr("stroke", "green")
+    .attr("stroke-width", 2.5); // Change the border color of the matching elements to green
+  
+    
+  Tooltip
+    .style("opacity", 1)
+    .style("left", event.pageX + 10 + "px")
+    .style("top", event.pageY + 10 + "px")
+  if ("properties" in item)
+  {
+    const linkedMap = residenceDataMap_2.get(item.properties.name);
+    Tooltip.html(`<div>Country: ${item.properties.name}</div>`);
 
+    function addDataLine(variableName) {
+        const entry = linkedMap.find(entry => entry.Variable === variableName);
+        if (entry) {
+            Tooltip.html(Tooltip.html() + `<div>${variableName}: ${entry.Value}</div>`);
+        }
+    }
+
+    // Add lines for "Very Severe" to "Undefined" conditionally
+    addDataLine('Very severe');
+    addDataLine('Severe');
+    addDataLine('Moderate');
+    addDataLine('Mild');
+    addDataLine('None');
+    addDataLine('Undefined');
+  }
+  else
+  {
+    const linkedMap = residenceDataMap_2.get(item.Residence);
+    Tooltip.html(`<div>Country: ${item.Residence}</div>`);
+
+    function addDataLine(variableName) {
+        const entry = linkedMap.find(entry => entry.Variable === variableName);
+        if (entry) {
+            Tooltip.html(Tooltip.html() + `<div>${variableName}: ${entry.Value}</div>`);
+        }
+    }
+
+    // Add lines for "Very Severe" to "Undefined" conditionally
+    addDataLine('Very severe');
+    addDataLine('Severe');
+    addDataLine('Moderate');
+    addDataLine('Mild');
+    addDataLine('None');
+    addDataLine('Undefined');
+  }
 }
 
 //Mouse Out Choropleth
 
-function handleMouseOutCM (event, item) {
+function handleMouseOutCountry (event, item) {
   // Filter the current data to remove entries with missing incomeperperson values
   let countriesInMap = Array.from(countryMedian.keys())
 
   // Reset the fill color of all elements with class "country data" to black
-  d3.selectAll(".country.data").attr("fill", "black");
+  d3.selectAll(".country.data")
+    .attr("stroke", "black")
+    .attr("stroke-width",1);
 
-  // Set the fill color of each country based on its incomeperperson value
-  countriesInMap.forEach((element) => {
-    d3.selectAll(".country.data")
-      .filter(function (d) {
-        return d.properties.name == element;
-      })
-      .attr("fill", d3.interpolatePurples(colorScale(countryMedian.get(element))));
-  });
+  d3.selectAll(".ChoroplethScale.data")
+    .attr("stroke", "black")
+    .attr("stroke-width",1);
 
-  // Reset the fill color of all elements with class "circle data" to steelblue
-  d3.selectAll(".ChoroplethScale.data").attr("fill", "white");
+  d3.selectAll(".LollipopLine.data")
+    .attr("stroke","grey")
+    .attr("stroke-width",1);
+
+  d3.selectAll(".Lollipopcircle.data")
+    .attr("stroke","none")
+
+  Tooltip
+    .style("opacity", 0)
+  d3.selectAll(this)
+    .style("stroke", "none")
+    .style("opacity", 0.8)
 
 }
 
