@@ -83,9 +83,9 @@ function createScatterplot() {
 		.attr("class", "scatter-circle")
 		.attr("cx", (d) => xScale(d.MedianHoursPlayedWeekly))
 		.attr("cy", (d) => yScale(d.MedianAge))
-		.attr("r", 5) // Adjust the radius as needed
+		.attr("r", 7) // Adjust the radius as needed
 		.attr("class","ScatterCircle data")
-	
+		
 		.attr("fill", d => d3.interpolatePurples(colorScale(countryMedian.get(d.Residence))))
 		.on("mouseover", handleMouseOverCountry)
 		.on("mouseout", handleMouseOutCountry);
