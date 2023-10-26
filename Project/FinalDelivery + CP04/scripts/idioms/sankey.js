@@ -20,9 +20,9 @@ function createSankey() {
     };
 
     // Function to check if a node with a specific ID already exists in sankeyData.nodes
-    function isNodeInSankeyData(nodeId,columnName) {
+    function isNodeInSankeyData(nodeId) {
         return sankeyData.nodes.some(function (node) {
-            return node.name === `${columnName}: ${nodeId}`;
+            return node.name === name;
         });
     }
 
@@ -42,28 +42,36 @@ function createSankey() {
 
             //console.log(nodeId)
 
-            if (!isNodeInSankeyData(nodeId,columnName)){
+            var name = `${columnName}: ${nodeId}`
+            
+
+            if (!isNodeInSankeyData(name)){
                 sankeyData.nodes.push({
-                    //id: nodeId,
-                    name: `${columnName}: ${nodeId}`,
+                    id: nodeId,
+                    name: name,
                     class: columnName
                 });
             }
 
             for (const otherClass of sankeyClasses) {
                 if (otherClass !== columnName) {
+
+                    var nodeID_t = item[otherClass]
+                    var targetID = `${otherClass}: ${nodeID_t}`
                     
-                    if(!isLinkInSankeyData(`${columnName}: ${nodeId}`,`${otherClass}: ${item[otherClass]}`)){
+                    if(!isLinkInSankeyData(name,targetID)){
+                        
                         sankeyData.links.push({
-                            source: `${columnName}: ${nodeId}`,
-                            target: `${otherClass}: ${item[otherClass]}`,
+                            source: name,
+                            target: targetID,
                             value: 1
                         });
                     }
                     else{
 
                         var linkToModify = sankeyData.links.find(function (link) {
-                            return link.source === `${columnName}: ${nodeId}` && link.target === `${otherClass}: ${item[otherClass]}`;
+                            return link.source === name && link.target === targetID;
+
                         });
                         
                         linkToModify.value = linkToModify.value+1; // Set the new value
@@ -84,7 +92,7 @@ function createSankey() {
     sankeyData_used.nodes = sankeyData.nodes
     
     function getClassOfNode(nodeId) {
-        const node = sankeyData.nodes.find(node => node.id === nodeId);
+        const node = sankeyData.nodes.find(node => node.name === nodeId);
         return node ? node.class : null;
     }
 
@@ -133,7 +141,7 @@ function createSankey() {
         .attr("y", d => d.y0)
         .attr("height", d => d.y1 - d.y0)
         .attr("width", d => d.x1 - d.x0)
-        .attr("fill", d => color(d.category));
+        .attr("fill", d => color(d.class));
 
     // Adds a title on the nodes.
     rect.append("title")
@@ -165,7 +173,7 @@ function createSankey() {
         .attr("y", d => (d.y1 + d.y0) / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-        .text(d => d.name);
+        .text(d => d.id);
 
 
 }
