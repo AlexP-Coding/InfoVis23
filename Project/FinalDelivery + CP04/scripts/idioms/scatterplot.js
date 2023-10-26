@@ -24,8 +24,15 @@ function createScatterplot() {
 	}));
 
 
+	const data = Array.from(countryMedianAge.keys()).map((country) => ({
+		Residence: country,
+		MedianHoursPlayedWeekly: countryMedianHours.get(country),
+		MedianAge: countryMedianAge.get(country),
+	}));
+	
+
 	// Define the margins for the scatterplot.
-	const scatterMargin = { top: 20, right: 20, bottom: 40, left: 40 };
+	const scatterMargin = { top: 10, right: 10, bottom: 20, left: 20 };
 	const scatterWidth = 600 - scatterMargin.left - scatterMargin.right;
 	const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 	
@@ -68,17 +75,20 @@ function createScatterplot() {
 		.call(yAxis);
 
 	// Create circles for each country.
-
 	svg
 		.selectAll(".scatter-circle")
-		.data(Array.from(countryMedianHours.entries())) // Use countryMedianHours
+		.data(data) 
 		.enter()
 		.append("circle")
 		.attr("class", "scatter-circle")
-		.attr("cx", (d) => xScale(d[1])) // X-coordinate: Median Hours Played Weekly
-		.attr("cy", (d) => yScale(countryMedianAge.get(d[0]))) // Y-coordinate: Median Age
+		.attr("cx", (d) => xScale(d.MedianHoursPlayedWeekly))
+		.attr("cy", (d) => yScale(d.MedianAge))
 		.attr("r", 5) // Adjust the radius as needed
-		.attr("fill", d => d3.interpolatePurples(colorScale(countryMedian.get(d[0])))); // 
+		.attr("class","ScatterCircle data")
+	
+		.attr("fill", d => d3.interpolatePurples(colorScale(countryMedian.get(d.Residence))))
+		.on("mouseover", handleMouseOverCountry)
+		.on("mouseout", handleMouseOutCountry);
 
 	// Add labels for the axes.
 	svg
@@ -98,13 +108,11 @@ function createScatterplot() {
 		.attr("transform", "rotate(-90)")
 		.text("Median Age");
 
-	// Function to handle mouseover event for the circles.
-	function handleMouseOverCircle(event, d) {
-		// Add code to display a tooltip or any other interaction you want on mouseover.
-	}
-
-	// Function to handle mouseout event for the circles.
-	function handleMouseOutCircle(event, d) {
-		// Add code to hide the tooltip or reset any interaction on mouseout.
-	}
+	
 }
+
+// Function to update the scatterplot
+function updateScatterplot() {
+
+}
+
