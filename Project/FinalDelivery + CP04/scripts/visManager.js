@@ -112,8 +112,8 @@ function updateIdioms() {
 
 	updateChoropleth();
 	updateLollipopChart();	
-  updateSankey();
-  updateScatterPlot();
+  	updateSankey();
+  	updateScatterPlot();
 }
 
 function createTooltip(){
