@@ -14,7 +14,7 @@ function createLollipopChart() {
     
     // mexer aqui para alterar o tamanho do chart!!!!!
     const margin_lp = { top: 10, right: 10, bottom: 90, left: 40 }; // Adjusted left margin_lp for labels
-    width_lp = 1500 - margin_lp.left - margin_lp.right; // Increased width
+    width_lp = window.innerWidth - margin_lp.left - margin_lp.right; // Increased width
     height_lp = 240 - margin_lp.top - margin_lp.bottom;
 
     // Append the SVG object to the body of the page
@@ -32,7 +32,7 @@ function createLollipopChart() {
     xNames = d3.scaleBand()
         .range([0, width_lp])
         .domain(data.map(d => d.Residence))
-        .padding(1);
+        .padding(2);
 
 
     svg.append("g")
@@ -94,7 +94,7 @@ function createLollipopChart() {
         .attr("y", -margin_lp.left + 10)
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
-        .text("Average SPIN_T (Median)")
+        .text("Median SPIN_T")
         .style("font-family", "Arial, sans-serif");
     
    
