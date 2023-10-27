@@ -1,7 +1,7 @@
 var sankeyData;
-var sankeyClasses = ['Work','Relation','Online','Gender','Multiplayer'];
+var sankeyClasses = ['Work','Relation','Online','Gender','whyplay','Multiplayer'];
 var sankeyData_used;
-var Sankey_order = ['Work','Relation','Online','Gender','Multiplayer'];
+var Sankey_order = ['Work','Relation','Online','Gender','whyplay','Multiplayer'];
 var sankey;
 var rect;
 var link;
@@ -414,7 +414,7 @@ function updateSankey() {
         .attr("stroke", d => {
             // Check if there's a corresponding id and class in clicked_classes_id
             const pair = clicked_classes_id.find(pair => pair.class === d.source.class && pair.id === d.source.id);
-            return pair ? "green" : "grey";
+            return pair ? "orange" : "grey";
         })
         //.attr("stroke-width", d => Math.max(1, d.width));
         .attr("stroke-width", d => {

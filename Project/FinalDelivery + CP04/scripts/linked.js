@@ -1,16 +1,3 @@
-// This function is triggered when the mouse pointer is over an element.
-function handleMouseOver(event, item) {
-	// TODO
-}
-
-// This function is triggered when the mouse pointer moves out of an element (mouseout event).
-function handleMouseOut(event, item) {
-	// TODO
-}
-
-
-// TODO
-
 //Choropleth Map Range selector
 
 //Handle the drag action on the minimum value selector
@@ -238,7 +225,7 @@ function handleMouseOutCountry (event, item) {
   d3.selectAll(".Lollipopcircle.data")
     .attr("stroke","none")
 
-  d3.selectAll(".ScatterCircle.data")
+  d3.selectAll(".scatter-circle.data")
       .attr("stroke", "black")
       .attr("stroke-width",1);
 
@@ -262,7 +249,7 @@ function handleMouseOverSankey (evnet,item){
     //console.log(e)
     d3.selectAll(`path.trajectory_${e.index}`)
       .attr('stroke-opacity', 1)
-      .attr('stroke', 'green');
+      .attr('stroke', 'orange');
   });
 
   /*item.targetLinks.forEach(e => {
@@ -316,7 +303,7 @@ function handleClickSankey(event,item){
             
             d3.selectAll(`path.trajectory_${e.index}`)
               .attr('stroke-opacity', 1)
-              .attr('stroke', 'green');
+              .attr('stroke', 'orange');
         });
     }else if(doesClassIDPairExist(item.class,item.id)) {
         
