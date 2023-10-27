@@ -95,6 +95,13 @@ function updateIdioms() {
 		return d.Residence != "Undefined" && d.SPIN_T >= range_min && d.SPIN_T <= range_max;
 	});
 
+	// Iterate through the clicked_classes_id array and apply filters for each class_id_pair
+    clicked_classes_id.forEach(function (class_id_pair) {
+        currentData_CM = currentData_CM.filter(function (d) {
+            return d[class_id_pair.class] === class_id_pair.id;
+        });
+    });
+
 	groupedData = d3.group(currentData_CM, (d) => d.Residence);
 	
 	

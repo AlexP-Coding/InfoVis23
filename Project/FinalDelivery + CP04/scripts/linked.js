@@ -197,5 +197,130 @@ function handleMouseOutCountry (event, item) {
 
 }
 
+function handleMouseOverSankey (evnet,item){
 
+  //console.log(item.sourceLinks)
+  
+  item.sourceLinks.forEach(e => {
+    //console.log(e)
+    d3.selectAll(`path.trajectory_${e.index}`)
+      .attr('stroke-opacity', 1)
+      .attr('stroke', 'green');
+  });
+
+  /*item.targetLinks.forEach(e => {
+    d3.selectAll(`path.trajectory_${e.index}`)
+      .attr('stroke-opacity', 1)
+      .attr('stroke', 'green');
+  });*/
+  
+
+}
+
+function handleMouseOutSankey(event,item){
+
+  item.sourceLinks.forEach(e => {
+    const path = d3.selectAll(`path.trajectory_${e.index}`)
+    if (!doesClassIDPairExist(item.class,item.id)){
+      path.attr('stroke-opacity', 0.5)
+      .attr('stroke', 'grey');
+    }
+  })
+
+  /*item.targetLinks.forEach(e => {
+    const path = d3.selectAll(`path.trajectory_${e.index}`)
+    if (!doesClassIDPairExist(item.class,item.id)){
+      path.attr('stroke-opacity', 0.5)
+      .attr('stroke', 'grey');
+    }
+  });*/
+}
+
+var clicked_classes_id = []
+
+function handleClickSankey(event,item){
+
+    //console.log(item);
+
+    if (!doesClassIDPairExist(item.class,item.id)) {
+
+        console.log(item.id);
+
+        var class_id_pair = {
+            class: item.class,
+            id: item.id
+        };
+
+        clicked_classes_id.push(class_id_pair);
+
+        console.log(clicked_classes_id)
+
+        item.sourceLinks.forEach(e => {
+            
+            d3.selectAll(`path.trajectory_${e.index}`)
+              .attr('stroke-opacity', 1)
+              .attr('stroke', 'green');
+        });
+    }else if(doesClassIDPairExist(item.class,item.id)) {
+        
+        clicked_classes_id = clicked_classes_id.filter(pair => !(pair.class === item.class && pair.id === item.id));
+
+        console.log(clicked_classes_id)
+
+        item.sourceLinks.forEach(e => {
+            d3.selectAll(`path.trajectory_${e.index}`)
+              .attr('stroke-opacity', 0.5)
+              .attr('stroke', 'grey');
+            
+        })
+
+    }
+
+    updateIdioms();
+
+}
 //function handle
+
+function doesClassIDPairExist(classToFind, valueToFind) {
+    return clicked_classes_id.some(pair => pair.class === classToFind && pair.id === valueToFind);
+}
+
+function handleDragSankey(event){
+
+    
+    const new_x = event.x;
+    if(new_x > 0 && new_x < width + margin.left + margin.right){
+
+        d3.select(this).attr("x", new_x);
+
+        text_sector = d3.select("#"+d3.select(this).data())
+    
+        text_sector.attr("x", new_x+(rectangleWidth-40) / 2);
+
+        const rectangleData = [];
+
+        d3.selectAll(".rectangle-text").each(function() {
+            const name = d3.select(this).data()[0];
+            const x = parseFloat(d3.select(this).attr("x"));
+            console.log(x)
+            rectangleData.push({ name, x });
+        });
+
+    //console.log(rectangleData)
+
+    // Sort the array by 'x' in ascending order
+    const sortedData = rectangleData.slice().sort((a, b) => a.x - b.x);
+
+    // Extract the sorted names into a separate array
+    const sortedNames = sortedData.map(item => item.name);
+
+    Sankey_order = sortedNames;
+
+    updateSankey();
+
+    }
+    
+
+
+
+}
