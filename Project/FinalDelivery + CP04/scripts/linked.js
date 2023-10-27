@@ -166,8 +166,8 @@ function handleMouseOverCountry(event,item){
         return item.Residence == d.Residence;
       }
     })
-    .attr("stroke", "green")
-    .attr("stroke-width", 2.5); // Change the border color of the matching elements to green
+    .attr("stroke", "orange")
+    .attr("stroke-width", 3.5); // Change the border color of the matching elements to green
   
     
   Tooltip
