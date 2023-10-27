@@ -201,7 +201,7 @@ function handleMouseOutCountry (event, item) {
   d3.selectAll(this)
     .style("stroke", "none")
     .style("opacity", 0.8)
-    
+      
 
 }
 

@@ -38,7 +38,7 @@ function createScatterplot() {
 	// Define the margins for the scatterplot.
 	const scatterMargin = { top: 40, right: 50, bottom: 80, left: 70 };
 	width_scatter = 600 - scatterMargin.left - scatterMargin.right;
-	height_scatter = 400 - scatterMargin.top - scatterMargin.bottom;
+	height_scatter = 500 - scatterMargin.top - scatterMargin.bottom;
 	
 
 	// Create an SVG element for the scatterplot.
@@ -92,7 +92,8 @@ function createScatterplot() {
 		.attr("stroke", "black")
 		.attr("fill", d => d3.interpolatePurples(colorScale(countryMedian.get(d.Residence))))
 		.on("mouseover", handleMouseOverCountry)
-		.on("mouseout", handleMouseOutCountry);
+		.on("mouseout", handleMouseOutCountry)
+		.on("click", handleClickCountry);
 
 	// Add labels for the axes.
 	svg
@@ -117,90 +118,74 @@ function createScatterplot() {
 	
 }
 
-// Function to update the scatterplot
-function updateScatterplot() {
+updateScatterPlot();
 
+
+// Create a function to update the scatter plot
+
+//IGNORAAAAAAAAAAAAAAAAAAAAAAAAAR
+function updateScatterPlot() {
+
+
+	// Create x and y sliders with min and max values, when the ranged is changed the the scatterplot is updated (remove circles)
+	// scatterplot is updated with the slider from the cloroppleth map
 	
-	// filter data to only include countries with a median spin score between the selected range in the slider of the cloropleth map
-	// insert a slider to select the range of age and hours played and remove the data points that are not in the range
-	const currentData_CM = globalData.filter(function (d) {
-		return d.Residence != "Undefined";
-	});
-
-	// Group the data by country
-	const groupedData = d3.group(currentData_CM, d => d.Residence);
-
-	// Calculate median age and median hours for each country
-	const countryMedianAge = new Map([...groupedData].map(([country, values]) => {
-		const medianAge = d3.median(values, d => d.Age);
-		return [country, medianAge];
-	}));
-
-	const countryMedianHours = new Map([...groupedData].map(([country, values]) => {
-		const medianHours = d3.median(values, d => d.Hours);
-		return [country, medianHours];
-	}));
-
-	countryMedian = new Map([...groupedData].map(([key, values]) => {
-		const medianSPIN_T = d3.median(values, (d) => d.SPIN_T);
-		return [key, medianSPIN_T];
-	}));
-	const data = Array.from(countryMedianAge.keys()).map((country) => ({
-		Residence: country,
-		MedianHoursPlayedWeekly: countryMedianHours.get(country),
-		MedianAge: countryMedianAge.get(country),
-	}));
-
-	xValues = d3.scaleBand()
-		.domain(sortedData.map(d => d.Residence)).range([0, width_scatter]);
 	
-	/////////////////////////////////////////////////////////////////////////
-
-	d3.select("#xAxis")
-		.transition()
-		.duration(1000) // You can adjust the duration as needed
-		.call(d3.axisBottom(xValues))
-		.selectAll("text")
-		.attr("transform", "translate(-10,0)rotate(-45)")
-		.style("text-anchor", "end");
-
-
 	
+	
+	// Create x and y scales.
+	xValues = d3
+		.scaleLinear()
+		.domain([0, d3.max(data, function(d) { return d.MedianHoursPlayedWeekly; })]) // Start at 0
+		.range([0, width_scatter]);
 
-	// Select all circles with class "ScatterCircle"
-	var circles = d3.selectAll(".ScatterCircle")
-		.data(sortedData, function (d) {
-			return d.Residence; // Use a key function to identify data points
+	yValues = d3
+		.scaleLinear()
+		.domain([0, 35]) // Start at 0
+		.range([height_scatter, 0]);
+
+// Create sliders for the x and y axes.
+	var xSlider = d3
+		.sliderBottom(xValues)
+		.min(d3.min(data, function(d) { return d.MedianHoursPlayedWeekly; }))
+		.max(d3.max(data, function(d) { return d.MedianHoursPlayedWeekly; }))
+		.width(width_scatter)
+		.on('onchange', val => {
+			// Update the scatter plot based on the selected range.
+			svg.selectAll(".scatter-circle")
+				.attr("opacity", function(d) {
+					return (d.MedianHoursPlayedWeekly >= val[0] && d.MedianHoursPlayedWeekly <= val[1]) ? 1 : 0;
+				});
 		});
 
-	// Transition for updating circles (circles that existed before)
-	circles.transition()
-		.duration(1000)
-		.attr("cx", function (d) {
-			return xValues(d.Residence) + xValues.bandwidth() / 2;
-		})
-		.attr("cy", d => yValues(d.SPIN_T))
-		.attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)))
-		.style("display", "block"); // Show the circles
+	var ySlider = d3
+		.sliderRight(yValues)
+		.min(d3.min(data, function(d) { return d.MedianAge; }))
+		.max(d3.max(data, function(d) { return d.MedianAge; }))
+		.height(height_scatter)
+		.on('onchange', val => {
+			// Update the scatter plot based on the selected range.
+			svg.selectAll(".scatter-circle")
+				.attr("opacity", function(d) {
+					return (d.MedianAge >= val[0] && d.MedianAge <= val[1]) ? 1 : 0;
+				});
+		});
 
-	// Enter selection for new data points
-	circles.enter()
-		.append("circle")
-		.attr("class", "ScatterCircle")
-		.attr("cx", function (d) {
-			return xValues(d.Residence) + xValues.bandwidth() / 2;
-		})
-		.attr("cy", d => yValues(d.SPIN_T))
-		.attr("fill", d => d3.interpolatePurples(colorScale(d.SPIN_T)));
+// Append the sliders to the SVG.
+	d3.select("#xAxisSlider")
+		.append('svg')
+		.attr('width', width_scatter + scatterMargin.left + scatterMargin.right)
+		.attr('height', 50)
+		.append('g')
+		.attr('transform', `translate(${scatterMargin.left},30)`)
+		.call(xSlider);
 
-	// Exit selection for circles that need to be removed
-	circles.exit()
-		.style("display", "none"); // Hide the circles
-
-
-
-
-
+	d3.select("#yAxisSlider")
+		.append('svg')
+		.attr('width', 50)
+		.attr('height', height_scatter + scatterMargin.top + scatterMargin.bottom)
+		.append('g')
+		.attr('transform', `translate(30,${scatterMargin.top})`)
+		.call(ySlider);
 
 }
-
