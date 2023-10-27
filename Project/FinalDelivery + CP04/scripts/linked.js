@@ -181,7 +181,7 @@ function handleMouseOutCountry (event, item) {
   d3.selectAll(".ChoroplethScale.data")
     .attr("stroke", "black")
     .attr("stroke-width",1);
-
+  
   d3.selectAll(".LollipopLine.data")
     .attr("stroke","grey")
     .attr("stroke-width",1);
@@ -189,11 +189,19 @@ function handleMouseOutCountry (event, item) {
   d3.selectAll(".Lollipopcircle.data")
     .attr("stroke","none")
 
+  d3.selectAll(".ScatterCircle.data")
+      .attr("stroke", "black")
+      .attr("stroke-width",1);
+
+ 
+    
+
   Tooltip
     .style("opacity", 0)
   d3.selectAll(this)
     .style("stroke", "none")
     .style("opacity", 0.8)
+      
 
 }
 

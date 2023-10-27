@@ -1,62 +1,154 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
 	<title>Gamers and Social Phobia</title>
-    <link rel="icon" type="image/x-icon" href="game-controller.png"/>
+	<link rel="icon" type="image/x-icon" href="game-controller.png" />
 	<!-- Styling for the dashboard -->
 	<style>
-	  .dashboard {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 1fr 1fr;
-		gap: 20px;
-		padding: 20px;
-	  }
-	  .visualization {
-		padding: 10px;
-	  }
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f5f5f5; 
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background-color: #682d8e;
+			color: white;
+			text-align: center;
+			padding: 10px 20px; 
+		}
+
+		.container {
+			display: flex;
+			flex-wrap: wrap; 
+			justify-content: space-between; 
+			margin: 20px;
+		}
+
+		.top-charts {
+			display: flex;
+			justify-content: space-between; 
+			flex-basis: 60%; 
+		}
+
+		.chart {
+			flex-basis: calc(33.33% - 5px); 
+			margin-right: 5px; 
+			background-color: white; 
+			padding: 10px; 
+			border: 1px solid #ccc; 
+			border-radius: 5px; 
+		}
+
+		.lollipop-chart {
+			width: 100%; 
+			margin-top: 5px; 
+			background-color: white; 
+			padding: 10px; 
+			border: 1px solid #ccc; 
+			border-radius: 5px; 
+		}
+
+		.sort-buttons {
+			display: flex;
+			flex-direction: column; 
+			align-items: flex-end; 
+		}
+
+		.sort-buttons button {
+			margin-top: 0px; 
+			margin-right: 10px; 
+			padding: 16px 24px; 
+			background-color: #a377f1; 
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.button:hover {
+			background-color: #8d5dc3; /* Darker purple color on hover */
+		}
 	</style>
-	<!-- Load the D3.js library for data visualization -->
+	<!--SCRIPTSSSSS AQUIIIIIIII!!!!!!!!!!!! AAAAAAAAAAAAAAAAAAAAAA-->
+	<!-- libraries -->
 	<script src="https://d3js.org/d3.v7.js"></script>
 	<script src="https://unpkg.com/d3-sankey@0"></script>
-  <!-- Needed to load JSON file -->
-	  
-  <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-	<!-- Load JavaScript files for the dashboard -->
+	<script src="https://unpkg.com/d3-simple-slider"></script>
+	<!-- JSON file -->
+	<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+	<!-- IDIOMAS -->
 	<script src="scripts/visManager.js"></script>
 	<script src="scripts/idioms/choropleth.js"></script>
-	<!--script src="scripts/idioms/customIdiom.js"></script!-->
 	<script src="scripts/idioms/lollipopChart.js"></script>
-   <script src="scripts/idioms/sankey.js"></script>
-   <script src="scripts/idioms/scatterplot.js"></script>
-   <script src="scripts/linked.js"></script>
- </head>
- <!-- Start the dashboard upon page load -->
-  <body onload="startDashboard()">
-	<!-- The main grid layout of the dashboard -->
-	<div class="dashboard">
-		
-	  <!-- Visualization area for the choroplet chart -->
-	  <div>
-      <!--div id="choroplethTitle"></div!-->
-      <div class="visualization" id="choroplethRange"></div>
-      <div class="visualization" id="choroplethLabel"></div>
-      <div class="visualization" id="choropleth"></div>
-    </div>
-	  <!-- Visualization area for the sankey chart -->
-	  <div class="visualization" id="sankeyChart"></div>
-	  <!-- Visualization area for the custom idiom -->
-		<div>
-			<div class="visualization" id="lollipopChart"></div>
-			<button onclick="updateLollipopChart('alphabetical')">Sort by Country Name</button>
-			<button onclick="updateLollipopChart('spinT')">Sort by Highest Spin T</button>
-			<button onclick="updateLollipopChart('avgHoursPlayed')">Sort by Median Hours Played</button>
+	<script src="scripts/idioms/sankey.js"></script>
+	<script src="scripts/idioms/scatterplot.js"></script>
+	<script src="scripts/linked.js"></script>
+</head>
+</head>
+<body onload="startDashboard()">
+<div class="header">
+	<h1>Gamers and Social Phobia</h1>
+</div>
+<div class="container">
+	<div class="top-charts">
+		<!-- CLOROPLETH CHART -->
+		<div class="chart">
+			<div class="visualization" id="choroplethRange">
+
+			</div>
+			<div class="visualization" id="choroplethLabel">
+
+			</div>
+			<div class="visualization" id="choropleth">
+
+			</div>
 		</div>
-	  <!-- Visualization area for the scatter plot -->
-	  <div class="visualization" id="scatterplot"></div>
-	  <!-- Visualization area for the lollipop chart -->
-			  <!--div class="visualization" id="customIdiom"></div>
-		
+		<!-- SCATTER PLOT -->
+		<div class="chart">
+			<div class "visualization" id="scatterPlot">
+
+		</div>
 	</div>
-  </body>
+	<!-- SANKEY CHART -->
+	<div class="chart">
+		<div class="visualization" id="sankeyChart">
+
+		</div>
+	</div>
+</div>
+<div class="lollipop-chart">
+	<!-- LOLLIPOP CHART-->
+	<div class="visualization" id="lollipopChart">
+
+	</div>
+	<div class="sort-buttons">
+		<button class="button" onclick="updateLollipopChart('alphabetical')">Sort by Country Name</button>
+		<button class="button" onclick="updateLollipopChart('spinT')">Sort by Highest Spin T</button>
+		<button class="button" onclick="updateLollipopChart('avgHoursPlayed')">Sort by Median Hours Played</button>
+	</div>
+</div>
+</div>
+</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -35,7 +35,7 @@ Aesthetics are important but the Vis needs to work too
 
 ## Interface Design
 User Experience:
-- Quality of experience while interacting with Vis
+- Quality of experience while interacting with Vis (aesthetics are important here)
 
 Usability:
 - How efficiently and effectively users can achieve their tasks
@@ -62,10 +62,9 @@ Analytical:
         - Remove extraneous info
         - Dataset reduction (just use the data/attributes truly needed)
     -  Fixing:
-        - 4/5 evaluators find poorly done things by themselves, then join them up
+        - 4-5 evaluators find poorly done things by themselves, then join them up
         - Can be performed early on
-
-Usability eval:
+- Empirical/User eval:
 1.   Give users pre-arranjed questions to answer
 2. Measure:
     - Time taken
@@ -75,3 +74,7 @@ Utility:
 - Ability to give useful answers
 Usability:
 - Easy to use to get useful answers
+- Things that go against it:
+    - Misleading
+    - Bothersome
+    - Tiresome

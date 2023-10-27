@@ -76,7 +76,7 @@ function startDashboard() {
 		Tooltip = createTooltip();
 	//	createCustomIdiom();
 		createSankey();
-// TODO		createScatterplot();
+		createScatterplot()
 	
 	})
 	.catch((error) => {
@@ -112,8 +112,8 @@ function updateIdioms() {
 
 	updateChoropleth();
 	updateLollipopChart();	
-	updateSankey();
-// TODO	updateScatterplot(data);
+  updateSankey();
+  updateScatterPlot();
 }
 
 function createTooltip(){
