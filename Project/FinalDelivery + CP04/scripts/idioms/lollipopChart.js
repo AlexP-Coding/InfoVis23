@@ -445,33 +445,6 @@ function updateLollipopChart(sortingOption) {
 
     }
 
- /*   for(circle of circleInfo){
-        
-        const correspondingObject = sortedData.find(d => d.Residence == circle.Residence)
-
-        //console.log(correspondingObject.Residence)
-        //console.log(xNames(correspondingObject.Residence))
-
-        x = xNames(correspondingObject.Residence) + xNames.bandwidth() / 2;
-        y =  yValues(correspondingObject.SPIN_T)
-       
-        group = ("#"+circle.Residence.replace(/ /g, "_").replace(/&/g, "and"))
-
-
-
-        d3.select(group)
-            .transition()
-            .duration(1000)
-            .attr("transform", `translate(${x},${y})`)
-        .each(function() {
-            console.log("Group ID2: " + this.id);
-        })
-
-
-    }*/
-
-
-
     
 }
 

@@ -156,7 +156,6 @@ function createChoroplethMap() {
   
 	SPIN_T_global = d3.median(countryMedian.values())
   
-  
 	legend
 	  .append("circle")
 	  .attr("id","SPINcircle")
