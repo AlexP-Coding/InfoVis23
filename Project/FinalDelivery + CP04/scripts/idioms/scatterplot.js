@@ -34,6 +34,8 @@ function createScatterplot() {
 		MedianAge: countryMedianAge.get(country),
 	}));
 	
+	
+	
 
 	// Define the margins for the scatterplot.
 	const scatterMargin = { top: 40, right: 50, bottom: 80, left: 70 };
@@ -115,77 +117,148 @@ function createScatterplot() {
 		.text("Median Age")
 		.style("font-family", "Arial, sans-serif");
 
+	////RANGE SELECTOR /////
+
 	
+	range_minAge = d3.min(data, d => d.MedianAge);
+	range_maxAge = d3.max(data, d => d.MedianAge);
+
+	const svg3 = d3
+		.select("#ScatterAgeRange")
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height*0.09);
+
+
+
+	const rangeSelectorScatter = svg3.append("g").attr("transform", `translate(25, 10)`);
+
+	rangeSelectorScatter
+		.append("rect")
+		.attr("id","selectorLine")
+		.attr("x",0)
+		.attr("y",0)
+		.attr("width", legendWidth)
+		.attr("height", 1)
+		.style("fill","black");
+
+
+	const select_min = rangeSelectorScatter.append("g")
+
+	const select_max = rangeSelectorScatter.append("g")
+
+
+	select_min
+		.append("circle")
+		.attr("id","range_min")
+		.attr("cx", (d) => xScale(range_minAge))
+		.attr("cy",0.5)
+		.attr("r", 5)
+		.attr("fill", "black")
+		.attr("stroke", "black")
+		.call(
+			d3
+				.drag()
+				.on("start", function (event) {
+					d3.select(this).attr("fill", "grey");
+				})
+				.on("drag", handleDragMinScatter)
+				.on("end", function (event) {
+					d3.select(this).attr("fill", "black");
+				})
+		);
+
+	select_max
+		.append("circle")
+		.attr("id","range_max")
+		.attr("cx", (d) => xScale(range_maxAge))
+		.attr("cy",0.5)
+		.attr("r", 5)
+		.attr("fill", "black")
+		.attr("stroke", "black")
+		.call(
+			d3
+				.drag()
+				.on("start", function (event) {
+					d3.select(this).attr("fill", "grey");
+				})
+				.on("drag", handleDragMaxScatter)
+				.on("end", function (event) {
+					d3.select(this).attr("fill", "black");
+				})
+		);
+
+	select_min
+		.append("text")
+		.attr("id","range_min_text")
+		.attr("x", (d) => xScale(range_minAge)-4.4)
+		.attr("y", height*0.03+9)
+		.text(range_min.toFixed(2));
+
+	select_max
+		.append("text")
+		.attr("id","range_max_text")
+		.attr("x", (d) => xScale(range_maxAge)-4.4)
+		.attr("y", height*0.03+9)
+		.text(range_max.toFixed(2));
+
+
 }
 
-updateScatterPlot();
 
-
-// Create a function to update the scatter plot
-
-//IGNORAAAAAAAAAAAAAAAAAAAAAAAAAR
+// Function to update the scatter plot based on slider values
 function updateScatterPlot() {
+	function updateScatterPlot() {
+		// Get the minimum and maximum age values from the range selectors
+		const minAge = range_minAge;
+		const maxAge = range_maxAge;
 
+		// Filter the data based on the selected age range
+		const filteredData = data.filter(d => d.MedianAge >= minAge && d.MedianAge <= maxAge);
 
-	// Create x and y sliders with min and max values, when the ranged is changed the the scatterplot is updated (remove circles)
-	// scatterplot is updated with the slider from the cloroppleth map
+		// Update the x-axis domain based on the selected age range
+		xScale.domain([0, d3.max(filteredData, d => d.MedianHoursPlayedWeekly)]);
+
+		// Select all circles and bind the filtered data
+		const circles = svg.selectAll(".scatter-circle").data(filteredData);
+
+		// Remove circles that are not in the filtered data
+		circles.exit().remove();
+
+		// Update existing circles
+		circles
+			.transition()
+			.duration(500)
+			.attr("cx", d => xScale(d.MedianHoursPlayedWeekly))
+			.attr("cy", d => yScale(d.MedianAge));
+
+		// Add new circles for the filtered data
+		circles.enter()
+			.append("circle")
+			.attr("class", "scatter-circle")
+			.attr("r", 7)
+			.attr("stroke", "black")
+			.attr("fill", d => d3.interpolatePurples(colorScale(d.Residence)))
+			.attr("cx", d => xScale(d.MedianHoursPlayedWeekly))
+			.attr("cy", d => yScale(d.MedianAge))
+			.on("mouseover", handleMouseOverCountry)
+			.on("mouseout", handleMouseOutCountry)
+			.on("click", handleClickCountry);
+
+		// Update the x-axis
+		svg.select(".x-axis")
+			.transition()
+			.duration(500)
+			.call(xAxis);
+
+		// You may want to update other elements of the plot as needed
+
+		// Update the range selector positions
 	
-	
-	
-	
-	// Create x and y scales.
-	xValues = d3
-		.scaleLinear()
-		.domain([0, d3.max(data, function(d) { return d.MedianHoursPlayedWeekly; })]) // Start at 0
-		.range([0, width_scatter]);
+		select_min.select("#range_minAge").attr("cx", xScale(minAge));
+		select_max.select("#range_maxAge").attr("cx", xScale(maxAge));
+	}
 
-	yValues = d3
-		.scaleLinear()
-		.domain([0, 35]) // Start at 0
-		.range([height_scatter, 0]);
-
-// Create sliders for the x and y axes.
-	var xSlider = d3
-		.sliderBottom(xValues)
-		.min(d3.min(data, function(d) { return d.MedianHoursPlayedWeekly; }))
-		.max(d3.max(data, function(d) { return d.MedianHoursPlayedWeekly; }))
-		.width(width_scatter)
-		.on('onchange', val => {
-			// Update the scatter plot based on the selected range.
-			svg.selectAll(".scatter-circle")
-				.attr("opacity", function(d) {
-					return (d.MedianHoursPlayedWeekly >= val[0] && d.MedianHoursPlayedWeekly <= val[1]) ? 1 : 0;
-				});
-		});
-
-	var ySlider = d3
-		.sliderRight(yValues)
-		.min(d3.min(data, function(d) { return d.MedianAge; }))
-		.max(d3.max(data, function(d) { return d.MedianAge; }))
-		.height(height_scatter)
-		.on('onchange', val => {
-			// Update the scatter plot based on the selected range.
-			svg.selectAll(".scatter-circle")
-				.attr("opacity", function(d) {
-					return (d.MedianAge >= val[0] && d.MedianAge <= val[1]) ? 1 : 0;
-				});
-		});
-
-// Append the sliders to the SVG.
-	d3.select("#xAxisSlider")
-		.append('svg')
-		.attr('width', width_scatter + scatterMargin.left + scatterMargin.right)
-		.attr('height', 50)
-		.append('g')
-		.attr('transform', `translate(${scatterMargin.left},30)`)
-		.call(xSlider);
-
-	d3.select("#yAxisSlider")
-		.append('svg')
-		.attr('width', 50)
-		.attr('height', height_scatter + scatterMargin.top + scatterMargin.bottom)
-		.append('g')
-		.attr('transform', `translate(30,${scatterMargin.top})`)
-		.call(ySlider);
 
 }
+

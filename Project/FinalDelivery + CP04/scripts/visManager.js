@@ -22,6 +22,10 @@ var clickedCountries;
 var teste_mouse_over;
 var groupedData;
 
+//Variables used in Scatter Chart
+var range_minAge;
+var range_maxAge;
+
 //Tooltip
 
 var Tooltip
@@ -76,7 +80,8 @@ function startDashboard() {
 		Tooltip = createTooltip();
 	//	createCustomIdiom();
 		createSankey();
-		createScatterplot()
+		createScatterplot();
+	
 	
 	})
 	.catch((error) => {

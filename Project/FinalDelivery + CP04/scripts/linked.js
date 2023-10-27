@@ -48,6 +48,55 @@ function handleDragMax(event){
 	updateIdioms();
 }
 
+////////////////////////// Scatterplot Range selector
+
+// Handle the drag action on the minimum age selector
+// Handle the drag action on the minimum age selector for the scatterplot
+function handleDragMinScatter(event) {
+    const newMinX = event.x;
+
+    // Ensure that the new minimum value is within the valid range
+    if (newMinX >= 0 && newMinX < select_max.select("#range_max").attr("cx")) {
+        // Update the position of the range selector circle
+        select_min.select("#range_min").attr("cx", newMinX);
+
+        // Calculate the new minimum age value based on the x position
+        const newMinAge = xScale.invert(newMinX);
+
+        // Update the displayed minimum age value
+        select_min.select("#range_min_text").attr("x", newMinX - 4.4).text(newMinAge.toFixed(2));
+
+        // Update the range_minAge variable
+        range_minAge = newMinAge;
+
+        // Call the function to update the scatter plot
+        updateScatterPlot();
+    }
+}
+
+function handleDragMaxScatter(event) {
+    const newMaxX = event.x;
+
+    // Ensure that the new maximum value is within the valid range
+    if (newMaxX > select_min.select("#range_min").attr("cx") && newMaxX <= width_scatter) {
+        // Update the position of the range selector circle
+        select_max.select("#range_max").attr("cx", newMaxX);
+
+        // Calculate the new maximum age value based on the x position
+        const newMaxAge = xScale.invert(newMaxX);
+
+        // Update the displayed maximum age value
+        select_max.select("#range_max_text").attr("x", newMaxX - 4.4).text(newMaxAge.toFixed(2));
+
+        // Update the range_maxAge variable
+        range_maxAge = newMaxAge;
+
+        // Call the function to update the scatter plot
+        updateScatterPlot();
+    }
+}
+//////////////////////////////////////////
+
 // Add new circles for clicked countries
 clickedCountries = []
 var new_circle_y = 0;
