@@ -78,7 +78,6 @@ function startDashboard() {
 		createChoroplethMap();
 		createLollipopChart();
 		Tooltip = createTooltip();
-	//	createCustomIdiom();
 		createSankey();
 		createScatterplot();
 	
