@@ -15,7 +15,7 @@ function createLollipopChart() {
     // mexer aqui para alterar o tamanho do chart!!!!!
     const margin_lp = { top: 10, right: 10, bottom: 90, left: 40 }; // Adjusted left margin_lp for labels
     width_lp = window.innerWidth - margin_lp.left - margin_lp.right; // Increased width
-    height_lp = 240 - margin_lp.top - margin_lp.bottom;
+    height_lp = 400 - margin_lp.top - margin_lp.bottom;
 
     // Append the SVG object to the body of the page
     const svg = d3.select("#lollipopChart")
