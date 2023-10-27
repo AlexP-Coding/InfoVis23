@@ -1,7 +1,7 @@
 var sankeyData;
 var sankeyClasses = ['Work','Relation','Online','Gender','Multiplayer'];
 var sankeyData_used;
-var Sankey_order = ['Work','Online','Relation','Gender','Multiplayer'];
+var Sankey_order = ['Work','Relation','Online','Gender','Multiplayer'];
 var sankey;
 var rect;
 var link;
@@ -15,10 +15,10 @@ function createSankey() {
     const svg = d3
         .select("#sankeyChart")
         .append("svg")
-        .attr("id", "mySankeySVG") // Add an id attribute to the svg
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
+        .attr("id", "mySankeySVG") // Add an id attribute to the svg
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     sankeyData = {
@@ -96,6 +96,8 @@ function createSankey() {
     };
 
     sankeyData_used.nodes = sankeyData.nodes
+
+    console.log(sankeyData_used.nodes)
     
     function getClassOfNode(nodeId) {
         const node = sankeyData.nodes.find(node => node.name === nodeId);
@@ -217,9 +219,9 @@ function createSankey() {
     rectangleText
         .append("rect")
         .attr("class", "rectangle-text")
-        .attr("x", (d, i) => i * rectangleWidth+30)
+        .attr("x", (d, i) => (i-0.25) * rectangleWidth+30)
         .attr("y", 0) // Adjust the y-coordinate as needed
-        .attr("width", rectangleWidth-40) // Use the calculated width
+        .attr("width", rectangleWidth-20) // Use the calculated width
         .attr("height", 40) // Adjust the height as needed
         .style("fill", "white") // Fill color for the rectangles
         .style("stroke", "black")
@@ -239,7 +241,7 @@ function createSankey() {
     rectangleText
         .append("text")
         .attr("id", (d) => d)
-        .attr("x", (d, i) => i * rectangleWidth + 30 + (rectangleWidth-40) / 2) // Center the text in the rectangle
+        .attr("x", (d, i) => (i-0.25) * rectangleWidth + 30 + (rectangleWidth-20) / 2) // Center the text in the rectangle
         .attr("y", 15) // Adjust the y-coordinate for text position
         .attr("text-anchor", "middle") // Center the text horizontally
         .attr("dominant-baseline", "middle") // Center the text vertically
@@ -293,6 +295,7 @@ function updateSankey() {
 
     //Criar o conjunto de dados necessário para o sankey ------------------
 
+
     for (const item of snakeyData_input){
 
         for (const columnName of sankeyClasses){
@@ -341,12 +344,14 @@ function updateSankey() {
         }
     }
 
+
     sankeyData_used =  {
         nodes: [],
         links: []
     };
 
     sankeyData_used.nodes = sankeyData.nodes
+    
     
     function getClassOfNode(nodeId) {
         const node = sankeyData.nodes.find(node => node.name === nodeId);
